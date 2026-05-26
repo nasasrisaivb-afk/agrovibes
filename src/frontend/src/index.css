@@ -1,0 +1,445 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "Bricolage Grotesque", sans-serif;
+    --font-body: "DM Sans", sans-serif;
+    --font-mono: "Geist Mono", monospace;
+    --radius: 0.625rem;
+
+    --background: 0.98 0.01 0;
+    --foreground: 0.18 0.02 220;
+    --card: 0.99 0.01 0;
+    --card-foreground: 0.18 0.02 220;
+    --popover: 0.99 0.01 0;
+    --popover-foreground: 0.18 0.02 220;
+
+    --primary: 0.56 0.14 150;
+    --primary-foreground: 0.98 0 0;
+
+    --secondary: 0.45 0.12 280;
+    --secondary-foreground: 0.98 0 0;
+    --muted: 0.92 0.02 0;
+    --muted-foreground: 0.5 0.03 220;
+
+    --accent: 0.72 0.18 65;
+    --accent-foreground: 0.98 0 0;
+
+    --destructive: 0.62 0.16 20;
+    --destructive-foreground: 0.98 0 0;
+
+    --border: 0.88 0.02 0;
+    --input: 0.95 0.02 0;
+    --ring: 0.72 0.18 65;
+
+    --chart-1: 0.56 0.14 150;
+    --chart-2: 0.72 0.18 65;
+    --chart-3: 0.68 0.15 155;
+    --chart-4: 0.45 0.12 280;
+    --chart-5: 0.62 0.16 20;
+
+    --sidebar: 0.98 0.01 0;
+    --sidebar-foreground: 0.18 0.02 220;
+    --sidebar-primary: 0.56 0.14 150;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.72 0.18 65;
+    --sidebar-accent-foreground: 0.98 0 0;
+    --sidebar-border: 0.88 0.02 0;
+    --sidebar-ring: 0.72 0.18 65;
+
+    --success: 0.68 0.15 155;
+    --warning: 0.75 0.12 70;
+    --trust: 0.55 0.08 255;
+
+    /* Role-adaptive visual hierarchy */
+    --role-farmer: 0.56 0.14 150;
+    --role-buyer: 0.62 0.14 25;
+    --role-educator: 0.68 0.15 155;
+    --role-machinery: 0.55 0.09 40;
+    --role-service: 0.65 0.14 200;
+
+    /* Live streaming & educational UI */
+    --live-indicator: 0.62 0.16 20;
+    --streaming-overlay: 0.12 0.02 220;
+    --course-badge: 0.72 0.15 155;
+    --certified: 0.68 0.15 155;
+  }
+
+  .dark {
+    --background: 0.08 0.01 220;
+    --foreground: 0.95 0.01 220;
+    --card: 0.14 0.01 220;
+    --card-foreground: 0.95 0.01 220;
+    --popover: 0.18 0.01 220;
+    --popover-foreground: 0.95 0.01 220;
+
+    --primary: 0.65 0.1 160;
+    --primary-foreground: 0.98 0 0;
+
+    --secondary: 0.55 0.1 280;
+    --secondary-foreground: 0.95 0.01 220;
+    --muted: 0.25 0.02 220;
+    --muted-foreground: 0.65 0.03 220;
+
+    --accent: 0.72 0.16 65;
+    --accent-foreground: 0.98 0 0;
+
+    --destructive: 0.68 0.14 20;
+    --destructive-foreground: 0.98 0 0;
+
+    --border: 0.2 0.01 220;
+    --input: 0.22 0.01 220;
+    --ring: 0.72 0.16 65;
+
+    --chart-1: 0.65 0.1 160;
+    --chart-2: 0.72 0.16 65;
+    --chart-3: 0.72 0.13 155;
+    --chart-4: 0.55 0.1 280;
+    --chart-5: 0.68 0.14 20;
+
+    --sidebar: 0.14 0.01 220;
+    --sidebar-foreground: 0.95 0.01 220;
+    --sidebar-primary: 0.65 0.1 160;
+    --sidebar-primary-foreground: 0.98 0 0;
+    --sidebar-accent: 0.72 0.16 65;
+    --sidebar-accent-foreground: 0.98 0 0;
+    --sidebar-border: 0.2 0.01 220;
+    --sidebar-ring: 0.72 0.16 65;
+
+    --success: 0.72 0.13 155;
+    --warning: 0.65 0.1 70;
+    --trust: 0.62 0.07 255;
+
+    /* Role-adaptive dark mode */
+    --role-farmer: 0.65 0.1 160;
+    --role-buyer: 0.68 0.12 25;
+    --role-educator: 0.72 0.13 155;
+    --role-machinery: 0.62 0.08 40;
+    --role-service: 0.72 0.1 200;
+
+    /* Live streaming dark mode */
+    --live-indicator: 0.72 0.16 20;
+    --streaming-overlay: 0.12 0.02 220;
+    --course-badge: 0.78 0.13 155;
+    --certified: 0.72 0.13 155;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+}
+
+@layer utilities {
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Semantic color utilities */
+  .text-success {
+    @apply text-[oklch(var(--success))];
+  }
+
+  .bg-success {
+    @apply bg-[oklch(var(--success))];
+  }
+
+  .border-success {
+    @apply border-[oklch(var(--success))];
+  }
+
+  .text-warning {
+    @apply text-[oklch(var(--warning))];
+  }
+
+  .bg-warning {
+    @apply bg-[oklch(var(--warning))];
+  }
+
+  .text-trust {
+    @apply text-[oklch(var(--trust))];
+  }
+
+  .bg-trust {
+    @apply bg-[oklch(var(--trust))];
+  }
+
+  .border-trust {
+    @apply border-[oklch(var(--trust))];
+  }
+
+  /* Role-adaptive utilities */
+  .role-farmer-accent {
+    @apply text-[oklch(var(--role-farmer))];
+  }
+
+  .role-buyer-accent {
+    @apply text-[oklch(var(--role-buyer))];
+  }
+
+  .role-educator-accent {
+    @apply text-[oklch(var(--role-educator))];
+  }
+
+  .role-machinery-accent {
+    @apply text-[oklch(var(--role-machinery))];
+  }
+
+  .role-service-accent {
+    @apply text-[oklch(var(--role-service))];
+  }
+
+  /* Live streaming & educational badges */
+  .badge-live {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-[0.75rem] font-semibold text-[oklch(var(--primary-foreground))] bg-[oklch(var(--live-indicator))];
+  }
+
+  .badge-certified {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-[0.75rem] font-semibold text-[oklch(var(--primary-foreground))] bg-[oklch(var(--certified))];
+  }
+
+  .badge-course {
+    @apply inline-flex items-center gap-1 px-2 py-1 rounded-full text-[0.75rem] font-semibold text-[oklch(var(--primary-foreground))] bg-[oklch(var(--course-badge))];
+  }
+
+  /* Top navigation elevation */
+  .nav-bar-elevated {
+    @apply bg-card border-b border-border shadow-xs;
+  }
+
+  /* Bottom navigation sticky */
+  .bottom-nav-sticky {
+    @apply fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-elevated;
+  }
+
+  /* FAB context-aware sizing */
+  .fab-primary {
+    @apply h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-elevated transition-smooth hover:shadow-elevated active:scale-95;
+  }
+
+  /* Role dashboard backgrounds (subtle depth) */
+  .dashboard-farmer {
+    @apply bg-gradient-to-br from-background to-muted/20;
+  }
+
+  .dashboard-educator {
+    @apply bg-gradient-to-br from-background to-muted/20;
+  }
+
+  .dashboard-buyer {
+    @apply bg-gradient-to-br from-background to-accent/10;
+  }
+
+  /* Card with role-specific left accent border */
+  .card-farmer {
+    @apply border-l-4 border-l-[oklch(var(--role-farmer))];
+  }
+
+  .card-educator {
+    @apply border-l-4 border-l-[oklch(var(--role-educator))];
+  }
+
+  /* Streaming overlay for live content */
+  .overlay-streaming {
+    @apply bg-[oklch(var(--streaming-overlay))] backdrop-blur-sm;
+  }
+
+  /* Voice message indicator */
+  .voice-waveform {
+    animation: voice-wave 0.6s ease-in-out infinite;
+  }
+
+  /* Trust/KYC visual indicator */
+  .trust-indicator-badge {
+    @apply inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium;
+    background-color: oklch(var(--trust) / 0.1);
+    border: 1px solid oklch(var(--trust) / 0.2);
+    color: oklch(var(--trust));
+  }
+
+  /* Accessible touch target helper */
+  .touch-target-lg {
+    @apply min-h-12 min-w-12;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Full-screen Reels immersive aesthetic */
+  .reels-container {
+    @apply w-screen h-dvh fixed inset-0 overflow-hidden;
+  }
+
+  .reels-video {
+    @apply w-full h-full object-cover;
+  }
+
+  /* Glassmorphic overlay card for side actions */
+  .reels-action-card {
+    @apply backdrop-blur-md rounded-2xl transition-smooth;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Reel side action buttons */
+  .reel-action-button {
+    @apply flex flex-col items-center justify-center gap-1 transition-smooth;
+    min-width: 3rem;
+    min-height: 3rem;
+    color: white;
+  }
+
+  .reel-action-button:active {
+    @apply scale-90;
+  }
+
+  /* Creator info overlay at bottom-left */
+  .reel-creator-overlay {
+    @apply absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black/80 to-transparent w-full;
+  }
+
+  .reel-creator-info {
+    @apply flex items-end gap-3;
+  }
+
+  .reel-creator-avatar {
+    @apply w-10 h-10 rounded-full border-2 border-white shadow-sm;
+  }
+
+  .reel-creator-details {
+    @apply flex flex-col gap-1 text-white text-sm;
+  }
+
+  .reel-creator-name {
+    @apply font-semibold text-base leading-tight;
+  }
+
+  .reel-creator-role {
+    @apply text-[0.75rem] opacity-80;
+  }
+
+  .reel-caption {
+    @apply text-white text-sm leading-snug mt-2;
+  }
+
+  .reel-hashtags {
+    @apply text-accent text-[0.75rem] mt-1;
+  }
+
+  /* Progress bar at top */
+  .reel-progress-bar {
+    @apply absolute top-0 left-0 h-1 bg-accent transition-all;
+  }
+
+  /* Transparent overlay nav for reels context */
+  .reels-nav-overlay {
+    @apply fixed top-0 left-0 right-0 z-40 px-4 py-3 bg-gradient-to-b from-black/40 to-transparent;
+  }
+
+  .reels-bottom-nav-overlay {
+    @apply fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-black/40 to-transparent;
+  }
+
+  /* Info strip that appears when video is paused */
+  .reel-info-strip {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 backdrop-blur-md rounded-2xl p-6 w-11/12 max-w-md transition-opacity;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .reel-info-content {
+    @apply text-white text-center;
+  }
+
+  .reel-info-title {
+    @apply font-display font-semibold text-lg mb-3;
+  }
+
+  .reel-info-item {
+    @apply flex justify-between items-center text-sm mb-2 pb-2 border-b border-white/10;
+  }
+
+  .reel-info-label {
+    @apply opacity-75;
+  }
+
+  .reel-info-value {
+    @apply font-semibold text-accent;
+  }
+
+  .fab-emerald {
+    @apply h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-elevated transition-smooth hover:shadow-elevated active:scale-95;
+  }
+
+  .swipe-card {
+    @apply bg-card rounded-xl border border-border shadow-sm transition-all duration-300 active:scale-95;
+  }
+
+  .filter-sheet {
+    @apply fixed bottom-0 left-0 right-0 md:static md:w-72 bg-card border-t md:border-t-0 md:border-r border-border rounded-t-2xl md:rounded-none p-4 max-h-[60vh] md:max-h-screen overflow-y-auto;
+  }
+
+  .sidebar-collapsible {
+    @apply hidden md:flex flex-col w-72 h-screen bg-sidebar border-r border-sidebar-border overflow-y-auto transition-all duration-300;
+  }
+
+  .data-table-row {
+    @apply border-b border-border hover:bg-muted/50 transition-colors duration-150;
+  }
+
+  .grid-list-toggle {
+    @apply inline-flex gap-1 p-1 bg-muted rounded-lg;
+  }
+
+  .product-grid-web {
+    @apply hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+  }
+
+  .product-feed-mobile {
+    @apply md:hidden flex flex-col gap-3;
+  }
+
+  .voice-pulse {
+    @apply animate-pulse bg-gradient-to-r from-primary via-accent to-primary rounded-full;
+  }
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("/assets/fonts/DMSans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/assets/fonts/GeistMono.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("/assets/fonts/SpaceGrotesk.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}

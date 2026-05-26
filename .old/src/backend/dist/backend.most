@@ -1,0 +1,570 @@
+// Version: 1.0.0
+type AlertSeverity__807058044 = {#Critical; #High; #Low; #Medium};
+type AlertType__568532633 = {#Pest; #Weather};
+type Alert__132957217 =
+  {
+    alertType : AlertType__568532633;
+    description : Text;
+    id : Nat;
+    location : Text;
+    severity : AlertSeverity__807058044;
+    timestamp : Int;
+    title : Text
+  };
+type Answer__993414097 =
+  {
+    authorId : Nat;
+    content : Text;
+    id : Nat;
+    questionId : Nat;
+    upvoteCount : Nat
+  };
+type AuditEvent__610765814 =
+  {action : Text; performedBy : Text; timestamp : Int};
+type Certification__15488693 =
+  {
+    badgeUrl : Text;
+    courseId : Nat;
+    id : Nat;
+    issuedAt : Int;
+    title : Text;
+    userId : Nat
+  };
+type ContractType__482289862 = {#None; #Phytosanitary; #Rental};
+type Conversation__52920023 =
+  {
+    id : Nat;
+    lastMessage : Text;
+    lastMessageAt : Int;
+    participantIds : [Nat];
+    unreadCount : Nat
+  };
+type Course__879300323 =
+  {
+    category : Text;
+    createdAt : Int;
+    description : Text;
+    durationMinutes : Nat;
+    educatorId : Nat;
+    enrollmentCount : Nat;
+    id : Nat;
+    isCertified : Bool;
+    level : Text;
+    price : Float;
+    rating : Float;
+    thumbnailUrl : Text;
+    title : Text
+  };
+type DirectMessage__249393636 =
+  {
+    content : Text;
+    id : Nat;
+    isRead : Bool;
+    isVoiceMessage : Bool;
+    receiverId : Nat;
+    senderId : Nat;
+    timestamp : Int
+  };
+type DisputeCase__706962440 =
+  {
+    evidence : [Text];
+    id : Nat;
+    orderId : Nat;
+    resolution : ?Text;
+    status : DisputeStatus__287740015;
+    timeline : [DisputeEvent__372348785]
+  };
+type DisputeEvent__372348785 =
+  {event : Text; performedBy : Text; timestamp : Int};
+type DisputeStatus__287740015 = {#Escalated; #Open; #Resolved; #UnderReview};
+type Educator__422573485 =
+  {
+    avatarUrl : Text;
+    bio : Text;
+    courseCount : Nat;
+    id : Nat;
+    kycStatus : KycStatus__1070124912;
+    name : Text;
+    rating : Float;
+    specialty : Text;
+    studentCount : Nat
+  };
+type Enrollment__394283136 =
+  {
+    completedAt : ?Int;
+    courseId : Nat;
+    enrolledAt : Int;
+    id : Nat;
+    progress : Float;
+    userId : Nat
+  };
+type EquipmentGuide__760760713 =
+  {
+    compatibility : [Text];
+    equipmentName : Text;
+    id : Nat;
+    maintenanceLog : [MaintenanceEntry__463240890]
+  };
+type ExpertProfile__877000424 =
+  {
+    available : Bool;
+    hourlyRate : Float;
+    id : Nat;
+    imageUrl : Text;
+    name : Text;
+    specialty : Text
+  };
+type Farmer__1067540689 =
+  {
+    avatarUrl : Text;
+    bio : Text;
+    id : Nat;
+    kycStatus : KycStatus__1070124912;
+    location : Text;
+    name : Text;
+    numListings : Nat;
+    rating : Float
+  };
+type ForumPost__546785788 =
+  {
+    author : Text;
+    body : Text;
+    id : Nat;
+    replies : [ForumReply__181481023];
+    title : Text;
+    upvotes : Nat
+  };
+type ForumReply__181481023 = {author : Text; body : Text; timestamp : Int};
+type GroupMessage__617320757 =
+  {
+    authorId : Nat;
+    content : Text;
+    groupId : Nat;
+    id : Nat;
+    isVoiceMessage : Bool;
+    timestamp : Int
+  };
+type Group__547500868 =
+  {
+    description : Text;
+    iconUrl : Text;
+    id : Nat;
+    memberCount : Nat;
+    name : Text
+  };
+type InventoryItem__900839365 =
+  {
+    currentStock : Nat;
+    forecastDays : Nat;
+    id : Nat;
+    listingId : Nat;
+    threshold : Nat
+  };
+type KycRecord__260144929 =
+  {
+    auditEvents : [AuditEvent__610765814];
+    id : Nat;
+    idVerified : Bool;
+    selfieVerified : Bool;
+    status : KycVerificationStatus__541682883;
+    userId : Nat
+  };
+type KycStatus__1070124912 = {#Pending; #Unverified; #Verified};
+type KycVerificationStatus__541682883 = {#Pending; #Rejected; #Verified};
+type Lesson__969378142 =
+  {
+    content : Text;
+    courseId : Nat;
+    durationMinutes : Nat;
+    id : Nat;
+    order : Nat;
+    title : Text;
+    videoUrl : Text
+  };
+type Listing__870937570 =
+  {
+    category : ProduceCategory__922703615;
+    createdAt : Int;
+    description : Text;
+    escrowEnabled : Bool;
+    farmerId : Nat;
+    id : Nat;
+    imageUrl : Text;
+    name : Text;
+    price : Float;
+    rating : Float
+  };
+type LiveStream__887949514 =
+  {
+    description : Text;
+    endedAt : ?Int;
+    hostId : Nat;
+    id : Nat;
+    scheduledAt : Int;
+    startedAt : ?Int;
+    status : StreamStatus__944221289;
+    thumbnailUrl : Text;
+    title : Text;
+    viewerCount : Nat
+  };
+type LogisticsListing__738668426 =
+  {
+    id : Nat;
+    imageUrl : Text;
+    providerName : Text;
+    ratePerKm : Float;
+    serviceArea : Text
+  };
+type MachineryListing__173215848 =
+  {
+    available : Bool;
+    category : Text;
+    dailyRate : Float;
+    id : Nat;
+    imageUrl : Text;
+    name : Text;
+    ownerId : Nat
+  };
+type MaintenanceEntry__463240890 =
+  {date : Int; description : Text; technician : Text};
+type MarketPriceTick__518403717 =
+  {
+    changePercent : Float;
+    cropName : Text;
+    date : Int;
+    id : Nat;
+    price : Float
+  };
+type MarketPrice__836823600 =
+  {
+    askPrice : Float;
+    bidPrice : Float;
+    crop : Text;
+    date : Int;
+    id : Nat;
+    region : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type NotifPriority__593550146 = {#Critical; #High; #Low; #Medium};
+type NotifType__252259030 =
+  {#Educational; #Emergency; #MarketIntelligence; #SystemAlert; #Transaction};
+type Notification__61102660 =
+  {
+    body : Text;
+    createdAt : Int;
+    id : Nat;
+    isRead : Bool;
+    notifType : NotifType__252259030;
+    priority : NotifPriority__593550146;
+    title : Text;
+    userId : Nat
+  };
+type OrderStatus__678972585 =
+  {#Confirmed; #Delivered; #Disputed; #Pending; #Shipped};
+type Order__956756699 =
+  {
+    buyerId : Nat;
+    createdAt : Int;
+    id : Nat;
+    listingId : Nat;
+    quantity : Nat;
+    status : OrderStatus__678972585;
+    total : Float
+  };
+type PayoutSchedule__130442431 = {#Daily; #Net30; #Weekly};
+type PlantingEntry__195653743 =
+  {
+    cropName : Text;
+    harvestDate : Int;
+    id : Nat;
+    notes : Text;
+    plantDate : Int
+  };
+type ProduceCategory__922703615 =
+  {#Dairy; #Eggs; #Fruits; #Grains; #Other; #Vegetables};
+type Question__54743339 =
+  {
+    answerCount : Nat;
+    authorId : Nat;
+    category : Text;
+    createdAt : Int;
+    description : Text;
+    id : Nat;
+    title : Text;
+    upvoteCount : Nat
+  };
+type Reel__403465720 =
+  {
+    farmerId : Nat;
+    id : Nat;
+    linkedListingId : ?Nat;
+    thumbnailUrl : Text;
+    title : Text;
+    viewCount : Nat
+  };
+type SalesAnalytics__937003621 =
+  {
+    cropName : Text;
+    id : Nat;
+    period : SalesPeriod__782973925;
+    totalRevenue : Float;
+    unitsSold : Nat
+  };
+type SalesPeriod__782973925 = {#Daily; #Monthly; #Weekly; #Yearly};
+type SeasonalAlertType__583859035 = {#Pest; #Price; #Weather};
+type SeasonalAlert__334138874 =
+  {
+    alertType : SeasonalAlertType__583859035;
+    cropName : Text;
+    description : Text;
+    id : Nat;
+    region : Text;
+    severity : AlertSeverity__807058044;
+    timestamp : Int;
+    title : Text
+  };
+type SellerListing__280738685 =
+  {
+    bulkUploadBatch : Text;
+    category : ProduceCategory__922703615;
+    certifications : [Text];
+    contractType : ContractType__482289862;
+    createdAt : Int;
+    description : Text;
+    escrowEnabled : Bool;
+    farmerId : Nat;
+    id : Nat;
+    imageUrl : Text;
+    name : Text;
+    payoutSchedule : PayoutSchedule__130442431;
+    price : Float;
+    rating : Float;
+    verificationStatus : VerificationStatus__878624031
+  };
+type StreamStatus__944221289 = {#Ended; #Live; #Scheduled};
+type TeamMember__952045315 =
+  {
+    id : Nat;
+    lastActive : Int;
+    name : Text;
+    permissions : [Text];
+    role : Text
+  };
+type VerificationStatus__878624031 = {#Approved; #Expired; #Pending};
+actor {
+  stable alerts :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Alert__132957217]];
+      var elementIndex : Nat__490723111
+    };
+  stable answers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Answer__993414097]];
+      var elementIndex : Nat__490723111
+    };
+  stable certifications :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Certification__15488693]];
+      var elementIndex : Nat__490723111
+    };
+  stable conversations :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Conversation__52920023]];
+      var elementIndex : Nat__490723111
+    };
+  stable courses :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Course__879300323]];
+      var elementIndex : Nat__490723111
+    };
+  stable directMessages :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?DirectMessage__249393636]];
+      var elementIndex : Nat__490723111
+    };
+  stable disputeCases :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?DisputeCase__706962440]];
+      var elementIndex : Nat__490723111
+    };
+  stable educators :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Educator__422573485]];
+      var elementIndex : Nat__490723111
+    };
+  stable enrollments :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Enrollment__394283136]];
+      var elementIndex : Nat__490723111
+    };
+  stable equipmentGuides :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?EquipmentGuide__760760713]];
+      var elementIndex : Nat__490723111
+    };
+  stable experts :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ExpertProfile__877000424]];
+      var elementIndex : Nat__490723111
+    };
+  stable farmers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Farmer__1067540689]];
+      var elementIndex : Nat__490723111
+    };
+  stable forumPosts :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?ForumPost__546785788]];
+      var elementIndex : Nat__490723111
+    };
+  stable groupMessages :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?GroupMessage__617320757]];
+      var elementIndex : Nat__490723111
+    };
+  stable groups :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Group__547500868]];
+      var elementIndex : Nat__490723111
+    };
+  stable inventoryItems :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?InventoryItem__900839365]];
+      var elementIndex : Nat__490723111
+    };
+  stable kycRecords :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?KycRecord__260144929]];
+      var elementIndex : Nat__490723111
+    };
+  stable lessons :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Lesson__969378142]];
+      var elementIndex : Nat__490723111
+    };
+  stable listings :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Listing__870937570]];
+      var elementIndex : Nat__490723111
+    };
+  stable liveStreams :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?LiveStream__887949514]];
+      var elementIndex : Nat__490723111
+    };
+  stable logistics :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?LogisticsListing__738668426]];
+      var elementIndex : Nat__490723111
+    };
+  stable machinery :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MachineryListing__173215848]];
+      var elementIndex : Nat__490723111
+    };
+  stable marketPriceTicks :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MarketPriceTick__518403717]];
+      var elementIndex : Nat__490723111
+    };
+  stable marketPrices :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?MarketPrice__836823600]];
+      var elementIndex : Nat__490723111
+    };
+  stable var nextCertificationId : Nat;
+  stable var nextConversationId : Nat;
+  stable var nextCourseId : Nat;
+  stable var nextDirectMessageId : Nat;
+  stable var nextDisputeId : Nat;
+  stable var nextEnrollmentId : Nat;
+  stable var nextForumPostId : Nat;
+  stable var nextKycId : Nat;
+  stable var nextListingId : Nat;
+  stable var nextMessageId : Nat;
+  stable var nextNotificationId : Nat;
+  stable var nextOrderId : Nat;
+  stable var nextQuestionId : Nat;
+  stable var nextReelId : Nat;
+  stable var nextSellerListingId : Nat;
+  stable var nextStreamId : Nat;
+  stable notifications :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Notification__61102660]];
+      var elementIndex : Nat__490723111
+    };
+  stable orders :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Order__956756699]];
+      var elementIndex : Nat__490723111
+    };
+  stable plantingEntries :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?PlantingEntry__195653743]];
+      var elementIndex : Nat__490723111
+    };
+  stable questions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Question__54743339]];
+      var elementIndex : Nat__490723111
+    };
+  stable reels :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Reel__403465720]];
+      var elementIndex : Nat__490723111
+    };
+  stable salesAnalytics :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?SalesAnalytics__937003621]];
+      var elementIndex : Nat__490723111
+    };
+  stable seasonalAlerts :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?SeasonalAlert__334138874]];
+      var elementIndex : Nat__490723111
+    };
+  stable sellerListings :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?SellerListing__280738685]];
+      var elementIndex : Nat__490723111
+    };
+  stable teamMembers :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?TeamMember__952045315]];
+      var elementIndex : Nat__490723111
+    }
+};

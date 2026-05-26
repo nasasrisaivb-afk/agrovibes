@@ -1,0 +1,26 @@
+{
+  "overview": "AgriMarket is a fully responsive agricultural marketplace platform inspired by Blinkit on mobile and Amazon on web — covering product discovery, selling, dashboards, trust & safety, and learning resources for farmers, buyers, and experts.",
+  "features": [
+    "Mobile-first card feeds with voice search (Blinkit/Swiggy style)",
+    "Web sidebar with parametric filters and grid/list toggle (Amazon/Flipkart style)",
+    "Home with Seasonal Pulse, Trusted Sellers Map, and Market Trends",
+    "Discover section with Seeds, Produce, Equipment categories and saved searches",
+    "Sell/List with 90-sec Quick List FAB, listing wizard, bulk CSV upload, and contract builder",
+    "Seller Dashboard with analytics, inventory forecasting, messages, and wallet",
+    "Trust & Safety with KYC verification, dispute center, and compliance reports",
+    "Resources with planting calendar, market prices, equipment guides, community, and learning hub",
+    "Role toggle (Buyer/Seller/Expert) that personalizes dashboards and navigation instantly",
+    "Rich hardcoded sample data: 15+ farmer profiles, 50+ listings, 10+ courses, 5+ educators"
+  ],
+  "category": "marketplace",
+  "tags": [
+    "agriculture",
+    "marketplace",
+    "mobile-first",
+    "responsive",
+    "e-commerce",
+    "farming",
+    "india"
+  ],
+  "last_updated": "2026-05-21T09:41:14.790Z"
+}

@@ -1,0 +1,600 @@
+type VerificationStatus = 
+ variant {
+   Approved;
+   Expired;
+   Pending;
+ };
+type TeamMember = 
+ record {
+   id: nat;
+   lastActive: int;
+   name: text;
+   permissions: vec text;
+   role: text;
+ };
+type SubmitOrderInput = 
+ record {
+   buyerId: nat;
+   listingId: nat;
+   quantity: nat;
+   total: float64;
+ };
+type StreamStatus = 
+ variant {
+   Ended;
+   Live;
+   Scheduled;
+ };
+type SellerListing = 
+ record {
+   bulkUploadBatch: text;
+   category: ProduceCategory;
+   certifications: vec text;
+   contractType: ContractType;
+   createdAt: int;
+   description: text;
+   escrowEnabled: bool;
+   farmerId: nat;
+   id: nat;
+   imageUrl: text;
+   name: text;
+   payoutSchedule: PayoutSchedule;
+   price: float64;
+   rating: float64;
+   verificationStatus: VerificationStatus;
+ };
+type SeasonalAlertType = 
+ variant {
+   Pest;
+   Price;
+   Weather;
+ };
+type SeasonalAlert = 
+ record {
+   alertType: SeasonalAlertType;
+   cropName: text;
+   description: text;
+   id: nat;
+   region: text;
+   severity: AlertSeverity;
+   timestamp: int;
+   title: text;
+ };
+type SalesPeriod = 
+ variant {
+   Daily;
+   Monthly;
+   Weekly;
+   Yearly;
+ };
+type SalesAnalytics = 
+ record {
+   cropName: text;
+   id: nat;
+   period: SalesPeriod;
+   totalRevenue: float64;
+   unitsSold: nat;
+ };
+type Reel = 
+ record {
+   farmerId: nat;
+   id: nat;
+   linkedListingId: opt nat;
+   thumbnailUrl: text;
+   title: text;
+   viewCount: nat;
+ };
+type Question = 
+ record {
+   answerCount: nat;
+   authorId: nat;
+   category: text;
+   createdAt: int;
+   description: text;
+   id: nat;
+   title: text;
+   upvoteCount: nat;
+ };
+type ProduceCategory = 
+ variant {
+   Dairy;
+   Eggs;
+   Fruits;
+   Grains;
+   Other;
+   Vegetables;
+ };
+type PlantingEntry = 
+ record {
+   cropName: text;
+   harvestDate: int;
+   id: nat;
+   notes: text;
+   plantDate: int;
+ };
+type PayoutSchedule = 
+ variant {
+   Daily;
+   Net30;
+   Weekly;
+ };
+type OrderStatus = 
+ variant {
+   Confirmed;
+   Delivered;
+   Disputed;
+   Pending;
+   Shipped;
+ };
+type Order = 
+ record {
+   buyerId: nat;
+   createdAt: int;
+   id: nat;
+   listingId: nat;
+   quantity: nat;
+   status: OrderStatus;
+   total: float64;
+ };
+type Notification = 
+ record {
+   body: text;
+   createdAt: int;
+   id: nat;
+   isRead: bool;
+   notifType: NotifType;
+   priority: NotifPriority;
+   title: text;
+   userId: nat;
+ };
+type NotifType = 
+ variant {
+   Educational;
+   Emergency;
+   MarketIntelligence;
+   SystemAlert;
+   Transaction;
+ };
+type NotifPriority = 
+ variant {
+   Critical;
+   High;
+   Low;
+   Medium;
+ };
+type MarketPriceTick = 
+ record {
+   changePercent: float64;
+   cropName: text;
+   date: int;
+   id: nat;
+   price: float64;
+ };
+type MarketPrice = 
+ record {
+   askPrice: float64;
+   bidPrice: float64;
+   crop: text;
+   date: int;
+   id: nat;
+   region: text;
+ };
+type MaintenanceEntry = 
+ record {
+   date: int;
+   description: text;
+   technician: text;
+ };
+type MachineryListing = 
+ record {
+   available: bool;
+   category: text;
+   dailyRate: float64;
+   id: nat;
+   imageUrl: text;
+   name: text;
+   ownerId: nat;
+ };
+type LogisticsListing = 
+ record {
+   id: nat;
+   imageUrl: text;
+   providerName: text;
+   ratePerKm: float64;
+   serviceArea: text;
+ };
+type LiveStream = 
+ record {
+   description: text;
+   endedAt: opt int;
+   hostId: nat;
+   id: nat;
+   scheduledAt: int;
+   startedAt: opt int;
+   status: StreamStatus;
+   thumbnailUrl: text;
+   title: text;
+   viewerCount: nat;
+ };
+type Listing = 
+ record {
+   category: ProduceCategory;
+   createdAt: int;
+   description: text;
+   escrowEnabled: bool;
+   farmerId: nat;
+   id: nat;
+   imageUrl: text;
+   name: text;
+   price: float64;
+   rating: float64;
+ };
+type Lesson = 
+ record {
+   content: text;
+   courseId: nat;
+   durationMinutes: nat;
+   id: nat;
+   order: nat;
+   title: text;
+   videoUrl: text;
+ };
+type KycVerificationStatus = 
+ variant {
+   Pending;
+   Rejected;
+   Verified;
+ };
+type KycStatus = 
+ variant {
+   Pending;
+   Unverified;
+   Verified;
+ };
+type KycRecord = 
+ record {
+   auditEvents: vec AuditEvent;
+   id: nat;
+   idVerified: bool;
+   selfieVerified: bool;
+   status: KycVerificationStatus;
+   userId: nat;
+ };
+type InventoryItem = 
+ record {
+   currentStock: nat;
+   forecastDays: nat;
+   id: nat;
+   listingId: nat;
+   threshold: nat;
+ };
+type GroupMessage = 
+ record {
+   authorId: nat;
+   content: text;
+   groupId: nat;
+   id: nat;
+   isVoiceMessage: bool;
+   timestamp: int;
+ };
+type Group = 
+ record {
+   description: text;
+   iconUrl: text;
+   id: nat;
+   memberCount: nat;
+   name: text;
+ };
+type ForumReply = 
+ record {
+   author: text;
+   body: text;
+   timestamp: int;
+ };
+type ForumPost = 
+ record {
+   author: text;
+   body: text;
+   id: nat;
+   replies: vec ForumReply;
+   title: text;
+   upvotes: nat;
+ };
+type Farmer = 
+ record {
+   avatarUrl: text;
+   bio: text;
+   id: nat;
+   kycStatus: KycStatus;
+   location: text;
+   name: text;
+   numListings: nat;
+   rating: float64;
+ };
+type ExpertProfile = 
+ record {
+   available: bool;
+   hourlyRate: float64;
+   id: nat;
+   imageUrl: text;
+   name: text;
+   specialty: text;
+ };
+type EquipmentGuide = 
+ record {
+   compatibility: vec text;
+   equipmentName: text;
+   id: nat;
+   maintenanceLog: vec MaintenanceEntry;
+ };
+type Enrollment = 
+ record {
+   completedAt: opt int;
+   courseId: nat;
+   enrolledAt: int;
+   id: nat;
+   progress: float64;
+   userId: nat;
+ };
+type Educator = 
+ record {
+   avatarUrl: text;
+   bio: text;
+   courseCount: nat;
+   id: nat;
+   kycStatus: KycStatus;
+   name: text;
+   rating: float64;
+   specialty: text;
+   studentCount: nat;
+ };
+type DisputeStatus = 
+ variant {
+   Escalated;
+   Open;
+   Resolved;
+   UnderReview;
+ };
+type DisputeEvent = 
+ record {
+   event: text;
+   performedBy: text;
+   timestamp: int;
+ };
+type DisputeCase = 
+ record {
+   evidence: vec text;
+   id: nat;
+   orderId: nat;
+   resolution: opt text;
+   status: DisputeStatus;
+   timeline: vec DisputeEvent;
+ };
+type DirectMessage = 
+ record {
+   content: text;
+   id: nat;
+   isRead: bool;
+   isVoiceMessage: bool;
+   receiverId: nat;
+   senderId: nat;
+   timestamp: int;
+ };
+type CreateSellerListingInput = 
+ record {
+   bulkUploadBatch: text;
+   category: ProduceCategory;
+   certifications: vec text;
+   contractType: ContractType;
+   description: text;
+   escrowEnabled: bool;
+   farmerId: nat;
+   imageUrl: text;
+   name: text;
+   payoutSchedule: PayoutSchedule;
+   price: float64;
+   verificationStatus: VerificationStatus;
+ };
+type CreateReelInput = 
+ record {
+   farmerId: nat;
+   linkedListingId: opt nat;
+   thumbnailUrl: text;
+   title: text;
+ };
+type CreateQuestionInput = 
+ record {
+   authorId: nat;
+   category: text;
+   description: text;
+   title: text;
+ };
+type CreateNotificationInput = 
+ record {
+   body: text;
+   notifType: NotifType;
+   priority: NotifPriority;
+   title: text;
+   userId: nat;
+ };
+type CreateLiveStreamInput = 
+ record {
+   description: text;
+   hostId: nat;
+   scheduledAt: int;
+   thumbnailUrl: text;
+   title: text;
+ };
+type CreateListingInput = 
+ record {
+   category: ProduceCategory;
+   description: text;
+   escrowEnabled: bool;
+   farmerId: nat;
+   imageUrl: text;
+   name: text;
+   price: float64;
+ };
+type CreateEnrollmentInput = 
+ record {
+   courseId: nat;
+   userId: nat;
+ };
+type CreateDirectMessageInput = 
+ record {
+   content: text;
+   isVoiceMessage: bool;
+   receiverId: nat;
+   senderId: nat;
+ };
+type CreateCourseInput = 
+ record {
+   category: text;
+   description: text;
+   durationMinutes: nat;
+   educatorId: nat;
+   isCertified: bool;
+   level: text;
+   price: float64;
+   thumbnailUrl: text;
+   title: text;
+ };
+type Course = 
+ record {
+   category: text;
+   createdAt: int;
+   description: text;
+   durationMinutes: nat;
+   educatorId: nat;
+   enrollmentCount: nat;
+   id: nat;
+   isCertified: bool;
+   level: text;
+   price: float64;
+   rating: float64;
+   thumbnailUrl: text;
+   title: text;
+ };
+type Conversation = 
+ record {
+   id: nat;
+   lastMessage: text;
+   lastMessageAt: int;
+   participantIds: vec nat;
+   unreadCount: nat;
+ };
+type ContractType = 
+ variant {
+   None;
+   Phytosanitary;
+   Rental;
+ };
+type Certification = 
+ record {
+   badgeUrl: text;
+   courseId: nat;
+   id: nat;
+   issuedAt: int;
+   title: text;
+   userId: nat;
+ };
+type AuditEvent = 
+ record {
+   action: text;
+   performedBy: text;
+   timestamp: int;
+ };
+type Answer = 
+ record {
+   authorId: nat;
+   content: text;
+   id: nat;
+   questionId: nat;
+   upvoteCount: nat;
+ };
+type AlertType = 
+ variant {
+   Pest;
+   Weather;
+ };
+type AlertSeverity = 
+ variant {
+   Critical;
+   High;
+   Low;
+   Medium;
+ };
+type Alert = 
+ record {
+   alertType: AlertType;
+   description: text;
+   id: nat;
+   location: text;
+   severity: AlertSeverity;
+   timestamp: int;
+   title: text;
+ };
+type AddGroupMessageInput = 
+ record {
+   authorId: nat;
+   content: text;
+   groupId: nat;
+   isVoiceMessage: bool;
+ };
+service : {
+  addGroupMessage: (input: AddGroupMessageInput) -> (GroupMessage);
+  add_dispute_case: (orderId: nat, evidence: vec text) -> (DisputeCase);
+  add_forum_post: (author: text, title: text, body: text) -> (ForumPost);
+  add_kyc_record: (userId: nat) -> (KycRecord);
+  add_seller_listing: (input: CreateSellerListingInput) -> (SellerListing);
+  createCourse: (input: CreateCourseInput) -> (Course);
+  createListing: (input: CreateListingInput) -> (Listing);
+  createLiveStream: (input: CreateLiveStreamInput) -> (LiveStream);
+  createNotification: (input: CreateNotificationInput) -> (Notification);
+  createQuestion: (input: CreateQuestionInput) -> (Question);
+  createReel: (input: CreateReelInput) -> (Reel);
+  enrollInCourse: (input: CreateEnrollmentInput) -> (Enrollment);
+  getAlerts: () -> (vec Alert) query;
+  getAnswers: (questionId: nat) -> (vec Answer) query;
+  getCertificationsByUser: (userId: nat) -> (vec Certification) query;
+  getConversations: (userId: nat) -> (vec Conversation) query;
+  getCourseById: (id: nat) -> (opt Course) query;
+  getCourses: () -> (vec Course) query;
+  getDirectMessages: (conversationId: nat) -> (vec DirectMessage) query;
+  getEducatorById: (id: nat) -> (opt Educator) query;
+  getEducators: () -> (vec Educator) query;
+  getEnrollmentsByUser: (userId: nat) -> (vec Enrollment) query;
+  getFarmers: () -> (vec Farmer) query;
+  getGroupMessages: (groupId: nat) -> (vec GroupMessage) query;
+  getGroups: () -> (vec Group) query;
+  getLessonsByCourse: (courseId: nat) -> (vec Lesson) query;
+  getListings: () -> (vec Listing) query;
+  getLiveStreams: () -> (vec LiveStream) query;
+  getNotifications: (userId: nat) -> (vec Notification) query;
+  getOrders: () -> (vec Order) query;
+  getQA: () -> (vec Question) query;
+  getReels: () -> (vec Reel) query;
+  getServices: () ->
+   (record {
+      experts: vec ExpertProfile;
+      logistics: vec LogisticsListing;
+      machinery: vec MachineryListing;
+    }) query;
+  get_dispute_cases: () -> (vec DisputeCase) query;
+  get_equipment_guides: () -> (vec EquipmentGuide) query;
+  get_forum_posts: () -> (vec ForumPost) query;
+  get_inventory_items: () -> (vec InventoryItem) query;
+  get_kyc_records: () -> (vec KycRecord) query;
+  get_market_price_ticks: () -> (vec MarketPriceTick) query;
+  get_market_prices: () -> (vec MarketPrice) query;
+  get_planting_entries: () -> (vec PlantingEntry) query;
+  get_sales_analytics: () -> (vec SalesAnalytics) query;
+  get_seasonal_alerts: () -> (vec SeasonalAlert) query;
+  get_seller_listing: (id: nat) -> (opt SellerListing) query;
+  get_seller_listings: () -> (vec SellerListing) query;
+  get_team_members: () -> (vec TeamMember) query;
+  markNotificationRead: (notifId: nat) -> (bool);
+  sendDirectMessage: (input: CreateDirectMessageInput) -> (DirectMessage);
+  submitOrder: (input: SubmitOrderInput) -> (Order);
+  update_kyc_status: (id: nat, status: KycVerificationStatus) -> (bool);
+}

@@ -1,0 +1,23 @@
+module {
+  public type Timestamp = Int;
+  public type FarmerId = Nat;
+  public type ListingId = Nat;
+  public type ReelId = Nat;
+  public type QuestionId = Nat;
+  public type AnswerId = Nat;
+  public type GroupId = Nat;
+  public type MessageId = Nat;
+  public type ServiceId = Nat;
+  public type AlertId = Nat;
+  public type OrderId = Nat;
+  public type KycId = Nat;
+  public type DisputeId = Nat;
+  public type PlantingEntryId = Nat;
+  public type EquipmentGuideId = Nat;
+  public type ForumPostId = Nat;
+  public type SellerListingId = Nat;
+  public type AnalyticsId = Nat;
+  public type InventoryItemId = Nat;
+  public type TeamMemberId = Nat;
+  public type MarketPriceId = Nat;
+};
