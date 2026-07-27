@@ -5,3 +5,6 @@ dist/
 .platform/
 .pnpm-store/
 .cache/
+.expo/
+expo-env.d.ts
+*.tsbuildinfo
