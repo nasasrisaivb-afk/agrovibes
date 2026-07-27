@@ -14,6 +14,7 @@ out of scope for this build.
 |----------|------|
 | Backend  | Motoko canister on the Internet Computer (Caffeine template) |
 | Frontend | React 19 + Vite + TypeScript + Tailwind (shadcn/ui), TanStack Router/Query |
+| Mobile   | Expo (React Native) + Expo Router — `src/mobile` |
 | Bindings | `pnpm bindgen` generates typed TS bindings from the canister Candid |
 | Auth     | Phone + OTP → canister session token (consumer); email + password (admin employees) |
 | Payments | Razorpay-shaped simulated provider with idempotent webhook confirmation |
@@ -35,6 +36,7 @@ src/backend/
   migration.mo      # upgrade migration dropping the legacy AgroVibes state
 test/               # mops tests: state machine, idempotency, KYC gating
 src/frontend/       # consumer app + admin console (/admin)
+src/mobile/         # Expo native shell (Browse / Sell / Orders / Profile)
 ```
 
 ## Commands
@@ -52,16 +54,20 @@ pnpm install --prefer-offline
 pnpm dev            # local dev server
 pnpm typecheck && pnpm check
 pnpm build
+
+# Mobile / Expo (from src/mobile)
+pnpm install --prefer-offline
+pnpm start          # Expo Go / simulator
+pnpm typecheck
 ```
 
 ## Mobile app + web app
 
-One responsive codebase serves both:
-
-- **Web** — desktop layouts via `md:` breakpoints, top navigation.
-- **Mobile** — bottom tab bar, 44px touch targets, installable **PWA**
-  (`manifest.webmanifest` + service worker). On Android Chrome use the install
-  prompt; on iOS Safari use Share → Add to Home Screen for a full-screen app.
+- **Web** — responsive Vite app (`src/frontend`) with installable **PWA**
+  (`manifest.webmanifest` + service worker).
+- **Native** — Expo app in `src/mobile` (Expo Router tabs). Run with
+  `cd src/mobile && pnpm start`. Placeholder screens mirror the marketplace
+  shell; nativize features from the web app next.
 
 ## Local development guide
 

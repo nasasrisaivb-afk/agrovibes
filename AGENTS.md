@@ -21,6 +21,13 @@
 - **build**: `mops build`
 - **test**: `mops test`
 
+**Mobile / Expo** (run from `src/mobile/`):
+
+- **install**: `pnpm install --prefer-offline`
+- **start**: `pnpm start`
+- **typecheck**: `pnpm typecheck`
+- **web preview**: `pnpm web`
+
 **Backend and frontend integration** (run from root):
 
 - **generate bindings**: `pnpm bindgen` This step is necessary to ensure the frontend can call the backend methods.
