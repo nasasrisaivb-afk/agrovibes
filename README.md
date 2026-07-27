@@ -54,6 +54,15 @@ pnpm typecheck && pnpm check
 pnpm build
 ```
 
+## Mobile app + web app
+
+One responsive codebase serves both:
+
+- **Web** — desktop layouts via `md:` breakpoints, top navigation.
+- **Mobile** — bottom tab bar, 44px touch targets, installable **PWA**
+  (`manifest.webmanifest` + service worker). On Android Chrome use the install
+  prompt; on iOS Safari use Share → Add to Home Screen for a full-screen app.
+
 ## Local development guide
 
 Everything below applies to the **Development** environment only (the
