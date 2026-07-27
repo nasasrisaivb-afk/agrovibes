@@ -1,184 +1,435 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { createRoute } from "@tanstack/react-router";
+import { TicketCategory, TicketStatus, UserRole } from "@/backend";
+import { AddBankAccountDialog } from "@/components/profile/AddBankAccountDialog";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { ListSkeleton } from "@/components/shared/Skeletons";
 import {
-  Bell,
-  ExternalLink,
-  FileText,
-  HelpCircle,
+  BankStatusBadge,
+  KycStatusBadge,
+  PayoutStatusBadge,
+} from "@/components/shared/StatusBadge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/AuthContext";
+import {
+  useCreateSupportTicket,
+  useMyBankAccounts,
+  useMyPayouts,
+  useMySupportTickets,
+} from "@/lib/backend";
+import { errorMessage } from "@/lib/errors";
+import { formatDate, formatInr } from "@/lib/format";
+import { Link, createRoute, useNavigate } from "@tanstack/react-router";
+import {
+  BadgeCheck,
+  Banknote,
+  Landmark,
+  LifeBuoy,
+  Loader2,
   LogOut,
-  MessageSquare,
-  Settings2,
-  Shield,
-  User,
-  Wallet,
+  Plus,
+  ShieldCheck,
+  UserRound,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { AccessibilitySettings } from "../components/profile/AccessibilitySettings";
-import { NotificationSettings } from "../components/profile/NotificationSettings";
-import { OrderHistory } from "../components/profile/OrderHistory";
-import { ProfileHeader } from "../components/profile/ProfileHeader";
-import { RoleSettings } from "../components/profile/RoleSettings";
-import { WalletSection } from "../components/profile/WalletSection";
-import { KycStatus } from "../types";
-import { Route as rootRoute } from "./__root";
+import { Route as appLayoutRoute } from "./app-layout";
 
-const MOCK_KYC_STATUS = KycStatus.Verified;
+const TICKET_CATEGORY_LABELS: Record<TicketCategory, string> = {
+  [TicketCategory.PAYMENTS]: "Payments",
+  [TicketCategory.KYC]: "KYC / verification",
+  [TicketCategory.ORDER_DISPUTE]: "Order dispute",
+  [TicketCategory.ACCOUNT]: "Account",
+  [TicketCategory.TECHNICAL]: "Technical issue",
+};
 
-const SUPPORT_LINKS = [
-  { icon: FileText, label: "Terms of Service", ocid: "terms-link" },
-  { icon: Shield, label: "Privacy Policy", ocid: "privacy-link" },
-  { icon: HelpCircle, label: "Help & Support", ocid: "help-link" },
-  { icon: MessageSquare, label: "Send Feedback", ocid: "feedback-link" },
-];
+const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
+  [TicketStatus.OPEN]: "Open",
+  [TicketStatus.IN_PROGRESS]: "In progress",
+  [TicketStatus.RESOLVED]: "Resolved",
+  [TicketStatus.CLOSED]: "Closed",
+};
 
-function ProfileContent() {
-  const handleLogout = () => {
-    toast.success("Logged out", {
-      description: "You have been signed out successfully.",
-    });
+function NewTicketDialog({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const createTicket = useCreateSupportTicket();
+  const [category, setCategory] = useState<TicketCategory>(TicketCategory.KYC);
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createTicket.mutate(
+      { category, subject, body },
+      {
+        onSuccess: () => {
+          toast.success(
+            "Support ticket created — we typically respond within 24 hours.",
+          );
+          setSubject("");
+          setBody("");
+          onClose();
+        },
+        onError: (error) => toast.error(errorMessage(error)),
+      },
+    );
   };
 
   return (
-    <div className="flex flex-col pb-8">
-      <ProfileHeader kycStatus={MOCK_KYC_STATUS} />
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Contact support</DialogTitle>
+          <DialogDescription>
+            Tell us what's wrong and we'll get back to you within 24 hours.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="ticket-category">Topic</Label>
+            <Select
+              value={category}
+              onValueChange={(v) => setCategory(v as TicketCategory)}
+            >
+              <SelectTrigger id="ticket-category">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(TICKET_CATEGORY_LABELS).map(
+                  ([value, label]) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  ),
+                )}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ticket-subject">Subject</Label>
+            <Input
+              id="ticket-subject"
+              required
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              placeholder="Short summary"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="ticket-body">Details</Label>
+            <Textarea
+              id="ticket-body"
+              rows={4}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              placeholder="What happened? Include order numbers if relevant."
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={createTicket.isPending || subject.trim() === ""}
+            className="w-full tap-target"
+          >
+            {createTicket.isPending && (
+              <Loader2
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            Submit ticket
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
-      <Tabs defaultValue="overview" className="flex-1" data-ocid="profile.tabs">
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border px-4 pt-3 pb-0">
-          <TabsList className="w-full h-9 rounded-xl bg-muted/60 grid grid-cols-5">
-            <TabsTrigger
-              value="overview"
-              className="text-[10px] gap-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-1"
-              data-ocid="profile.tab-overview"
-            >
-              <User className="h-3 w-3" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger
-              value="wallet"
-              className="text-[10px] gap-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-1"
-              data-ocid="profile.tab-wallet"
-            >
-              <Wallet className="h-3 w-3" />
-              Wallet
-            </TabsTrigger>
-            <TabsTrigger
-              value="orders"
-              className="text-[10px] gap-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-1"
-              data-ocid="profile.tab-orders"
-            >
-              <Shield className="h-3 w-3" />
-              Orders
-            </TabsTrigger>
-            <TabsTrigger
-              value="notifications"
-              className="text-[10px] gap-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-1"
-              data-ocid="profile.tab-notifications"
-            >
-              <Bell className="h-3 w-3" />
-              Notifs
-            </TabsTrigger>
-            <TabsTrigger
-              value="settings"
-              className="text-[10px] gap-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-lg px-1"
-              data-ocid="profile.tab-settings"
-            >
-              <Settings2 className="h-3 w-3" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
+function ProfileScreen() {
+  const navigate = useNavigate();
+  const { section } = Route.useSearch();
+  const { isAuthenticated, isLoading, user, isBuyer, isSeller, logout } =
+    useAuth();
+  const bankAccounts = useMyBankAccounts();
+  const payouts = useMyPayouts();
+  const tickets = useMySupportTickets();
+  const [bankDialogOpen, setBankDialogOpen] = useState(false);
+  const [ticketDialogOpen, setTicketDialogOpen] = useState(false);
+
+  useEffect(() => {
+    if (section === "support" && isAuthenticated) setTicketDialogOpen(true);
+  }, [section, isAuthenticated]);
+
+  if (isLoading) return <ListSkeleton rows={3} />;
+  if (!isAuthenticated || !user) {
+    return (
+      <EmptyState
+        icon={UserRound}
+        title="You're not signed in"
+        description="Sign in with your mobile number to manage your profile, bank accounts and payouts."
+        actionLabel="Sign in"
+        onAction={() => navigate({ to: "/auth", search: {} })}
+      />
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl space-y-6">
+      <section className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 font-display text-xl font-bold text-primary">
+          {(user.name || "U").charAt(0).toUpperCase()}
         </div>
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate font-display text-lg font-bold">
+            {user.name || "CropVibe user"}
+          </h1>
+          <p className="text-sm text-muted-foreground">+91 {user.phone}</p>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {user.roles.map((role) => (
+              <span
+                key={role}
+                className="rounded-full border border-border bg-muted px-2 py-0.5 text-[11px] font-medium"
+              >
+                {role === UserRole.BUYER ? "Buyer" : "Seller"}
+              </span>
+            ))}
+            <KycStatusBadge status={user.kycStatus} />
+          </div>
+        </div>
+      </section>
 
-        {/* Overview */}
-        <TabsContent
-          value="overview"
-          className="mt-0 px-4 py-4 flex flex-col gap-5"
+      <section className="space-y-2">
+        <Link
+          to="/kyc"
+          className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-sm font-medium transition-colors hover:border-primary/40"
         >
-          <RoleSettings />
-          <Separator className="opacity-50" />
-          <section>
-            <h2 className="font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-2.5">
-              Support
-            </h2>
-            <div className="bg-card rounded-2xl border border-border overflow-hidden">
-              {SUPPORT_LINKS.map(({ icon: Icon, label, ocid }, i, arr) => (
-                <button
-                  type="button"
-                  key={label}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-muted/40 transition-colors ${i < arr.length - 1 ? "border-b border-border" : ""}`}
-                  data-ocid={ocid}
-                  onClick={() =>
-                    toast.info(label, { description: "Coming soon!" })
-                  }
+          <ShieldCheck className="h-5 w-5 text-primary" aria-hidden="true" />
+          Identity verification
+          <span className="ml-auto text-muted-foreground">Manage</span>
+        </Link>
+        {!isSeller && (
+          <button
+            type="button"
+            onClick={() =>
+              navigate({ to: "/auth", search: { addRole: "SELLER" } })
+            }
+            className="tap-target flex w-full items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left text-sm font-medium transition-colors hover:border-primary/40"
+          >
+            <BadgeCheck className="h-5 w-5 text-primary" aria-hidden="true" />
+            Become a seller
+            <span className="ml-auto text-muted-foreground">Set up</span>
+          </button>
+        )}
+        {!isBuyer && (
+          <button
+            type="button"
+            onClick={() =>
+              navigate({ to: "/auth", search: { addRole: "BUYER" } })
+            }
+            className="tap-target flex w-full items-center gap-3 rounded-xl border border-border bg-card px-4 py-3.5 text-left text-sm font-medium transition-colors hover:border-primary/40"
+          >
+            <BadgeCheck className="h-5 w-5 text-primary" aria-hidden="true" />
+            Start buying
+            <span className="ml-auto text-muted-foreground">Set up</span>
+          </button>
+        )}
+      </section>
+
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold">
+            <Landmark className="h-4 w-4 text-primary" aria-hidden="true" />{" "}
+            Bank accounts
+          </h2>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setBankDialogOpen(true)}
+            className="tap-target"
+          >
+            <Plus className="mr-1 h-4 w-4" aria-hidden="true" /> Add
+          </Button>
+        </div>
+        {bankAccounts.isPending ? (
+          <ListSkeleton rows={1} />
+        ) : bankAccounts.isError ? (
+          <ErrorState
+            error={bankAccounts.error}
+            onRetry={() => bankAccounts.refetch()}
+          />
+        ) : (bankAccounts.data ?? []).length === 0 ? (
+          <EmptyState
+            icon={Landmark}
+            title="No bank account yet"
+            description="Add and verify a bank account to receive payouts from your sales."
+            actionLabel="Add bank account"
+            onAction={() => setBankDialogOpen(true)}
+          />
+        ) : (
+          <div className="space-y-2">
+            {(bankAccounts.data ?? []).map((account) => (
+              <div
+                key={account.id.toString()}
+                className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium">
+                    {account.bankName} ····{account.accountNumberLast4}
+                  </p>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {account.branch} · {account.accountHolderName}
+                  </p>
+                </div>
+                <BankStatusBadge status={account.verificationStatus} />
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {isSeller && (
+        <section className="space-y-3">
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold">
+            <Banknote className="h-4 w-4 text-primary" aria-hidden="true" />{" "}
+            Payouts
+          </h2>
+          {payouts.isPending ? (
+            <ListSkeleton rows={1} />
+          ) : payouts.isError ? (
+            <ErrorState
+              error={payouts.error}
+              onRetry={() => payouts.refetch()}
+            />
+          ) : (payouts.data ?? []).length === 0 ? (
+            <EmptyState
+              icon={Banknote}
+              title="No payouts yet"
+              description="Payouts are scheduled automatically after your orders complete, following the hold period."
+              actionLabel="View my sales"
+              onAction={() => navigate({ to: "/orders" })}
+            />
+          ) : (
+            <div className="space-y-2">
+              {(payouts.data ?? []).map((payout) => (
+                <div
+                  key={payout.id.toString()}
+                  className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3"
                 >
-                  <Icon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm flex-1">{label}</span>
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground/50" />
-                </button>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-sm font-semibold">
+                      {formatInr(payout.amountInr)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {payout.orderId !== undefined
+                        ? `Order #${payout.orderId.toString()} · `
+                        : ""}
+                      {payout.paidAt !== undefined
+                        ? `Paid ${formatDate(payout.paidAt)}`
+                        : `Scheduled for ${formatDate(payout.scheduledFor)}`}
+                    </p>
+                  </div>
+                  <PayoutStatusBadge status={payout.status} />
+                </div>
               ))}
             </div>
-          </section>
+          )}
+        </section>
+      )}
 
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-display text-base font-semibold">
+            <LifeBuoy className="h-4 w-4 text-primary" aria-hidden="true" />{" "}
+            Support
+          </h2>
           <Button
-            type="button"
             variant="outline"
-            className="w-full gap-2 text-destructive border-destructive/30 hover:bg-destructive/5 transition-smooth"
-            onClick={handleLogout}
-            data-ocid="sign-out-btn"
+            size="sm"
+            onClick={() => setTicketDialogOpen(true)}
+            className="tap-target"
           >
-            <LogOut className="h-4 w-4" />
-            Sign Out
+            <Plus className="mr-1 h-4 w-4" aria-hidden="true" /> New ticket
           </Button>
-
-          <div className="flex items-center gap-1.5 justify-center">
-            <div className="h-px flex-1 bg-border/50" />
-            <p className="text-center text-[10px] text-muted-foreground px-2">
-              © {new Date().getFullYear()}. Built with love using{" "}
-              <a
-                href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
-                  typeof window !== "undefined" ? window.location.hostname : "",
-                )}`}
-                className="underline hover:text-foreground transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
+        </div>
+        {tickets.isPending ? (
+          <ListSkeleton rows={1} />
+        ) : tickets.isError ? (
+          <ErrorState error={tickets.error} onRetry={() => tickets.refetch()} />
+        ) : (tickets.data ?? []).length === 0 ? (
+          <p className="rounded-xl border border-dashed border-border px-4 py-4 text-center text-sm text-muted-foreground">
+            No support tickets. If anything goes wrong with payments, KYC or
+            orders, raise one here.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {(tickets.data ?? []).map((ticket) => (
+              <div
+                key={ticket.id.toString()}
+                className="rounded-xl border border-border bg-card px-4 py-3"
               >
-                caffeine.ai
-              </a>
-            </p>
-            <div className="h-px flex-1 bg-border/50" />
+                <div className="flex items-center justify-between gap-2">
+                  <p className="line-clamp-1 text-sm font-medium">
+                    {ticket.subject}
+                  </p>
+                  <span className="whitespace-nowrap rounded-full border border-border bg-muted px-2 py-0.5 text-[11px]">
+                    {TICKET_STATUS_LABELS[ticket.status]}
+                  </span>
+                </div>
+                <p className="mt-0.5 text-xs text-muted-foreground">
+                  {TICKET_CATEGORY_LABELS[ticket.category]} ·{" "}
+                  {formatDate(ticket.createdAt)}
+                </p>
+              </div>
+            ))}
           </div>
-        </TabsContent>
+        )}
+      </section>
 
-        {/* Wallet */}
-        <TabsContent value="wallet" className="mt-0 px-4 py-4">
-          <WalletSection />
-        </TabsContent>
+      <Button
+        variant="outline"
+        onClick={async () => {
+          await logout();
+          navigate({ to: "/" });
+        }}
+        className="w-full tap-target"
+      >
+        <LogOut className="mr-2 h-4 w-4" aria-hidden="true" /> Sign out
+      </Button>
 
-        {/* Orders */}
-        <TabsContent value="orders" className="mt-0 px-4 py-4">
-          <OrderHistory />
-        </TabsContent>
-
-        {/* Notifications */}
-        <TabsContent value="notifications" className="mt-0 px-4 py-4">
-          <NotificationSettings />
-        </TabsContent>
-
-        {/* Settings */}
-        <TabsContent
-          value="settings"
-          className="mt-0 px-4 py-4 flex flex-col gap-5"
-        >
-          <AccessibilitySettings />
-        </TabsContent>
-      </Tabs>
+      <AddBankAccountDialog
+        open={bankDialogOpen}
+        onClose={() => setBankDialogOpen(false)}
+      />
+      <NewTicketDialog
+        open={ticketDialogOpen}
+        onClose={() => setTicketDialogOpen(false)}
+      />
     </div>
   );
 }
 
 export const Route = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => appLayoutRoute,
   path: "/profile",
-  component: ProfileContent,
+  validateSearch: (search: Record<string, unknown>): { section?: string } => ({
+    section: typeof search.section === "string" ? search.section : undefined,
+  }),
+  component: ProfileScreen,
 });

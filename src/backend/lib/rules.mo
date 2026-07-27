@@ -304,8 +304,18 @@ module {
   };
 
   public func simulateKycProvider(fileUrl : Text, selfieUrl : ?Text) : SimulatedKycResult {
+    // Uploaded documents arrive as data URLs with the original file name in
+    // the fragment ("...#photo.jpg"). Only the fragment is inspected so the
+    // base64 payload can never accidentally contain a trigger keyword.
+    func hintOf(url : Text) : Text {
+      var hint = url;
+      for (part in url.split(#char '#')) {
+        hint := part;
+      };
+      hint.toLower();
+    };
     func has(haystack : Text, needle : Text) : Bool {
-      haystack.toLower().contains(#text needle);
+      hintOf(haystack).contains(#text needle);
     };
     let selfie = switch (selfieUrl) { case (null) ""; case (?s) s };
     if (has(fileUrl, "fraud") or has(selfie, "fraud")) {
