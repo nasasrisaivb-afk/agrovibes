@@ -1,3 +1,4 @@
+import { InstallPrompt } from "@/components/shared/InstallPrompt";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useMyNotifications } from "@/lib/backend";
@@ -14,17 +15,25 @@ const NAV_ITEMS = [
 ] as const;
 
 export function AppShell() {
-  const { isAuthenticated, me, user } = useAuth();
+  const { isAuthenticated, isLoading, me, user } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const notifications = useMyNotifications();
   const unread = isAuthenticated
     ? (notifications.data?.filter((n) => !n.read).length ??
       Number(me?.unreadNotifications ?? 0n))
     : 0;
+  const heroMode = pathname === "/" && !isAuthenticated && !isLoading;
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col">
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
+      <header
+        className={cn(
+          "sticky top-0 z-40 border-b backdrop-blur transition-colors",
+          heroMode
+            ? "border-transparent bg-background/40"
+            : "border-border bg-background/90",
+        )}
+      >
         <div className="flex h-14 items-center justify-between gap-3 px-4">
           <Link
             to="/"
@@ -135,6 +144,7 @@ export function AppShell() {
           })}
         </div>
       </nav>
+      <InstallPrompt />
     </div>
   );
 }

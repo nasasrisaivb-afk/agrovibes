@@ -23,3 +23,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </InternetIdentityProvider>
   </QueryClientProvider>,
 );
+
+// Register the installable PWA service worker (production builds only —
+// Vite's HMR and the SW fight over module graphs in `pnpm dev`).
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      // Offline install is best-effort; the app still works without it.
+    });
+  });
+}
