@@ -7,533 +7,740 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface DisputeEvent {
-    event: string;
-    performedBy: string;
-    timestamp: bigint;
-}
-export interface GroupMessage {
-    id: bigint;
-    content: string;
-    authorId: bigint;
-    groupId: bigint;
-    isVoiceMessage: boolean;
-    timestamp: bigint;
-}
-export interface CreateLiveStreamInput {
-    title: string;
-    thumbnailUrl: string;
-    description: string;
-    hostId: bigint;
-    scheduledAt: bigint;
-}
-export interface CreateDirectMessageInput {
-    content: string;
-    isVoiceMessage: boolean;
-    receiverId: bigint;
-    senderId: bigint;
-}
-export interface AddGroupMessageInput {
-    content: string;
-    authorId: bigint;
-    groupId: bigint;
-    isVoiceMessage: boolean;
-}
-export interface DisputeCase {
-    id: bigint;
-    status: DisputeStatus;
-    resolution?: string;
-    orderId: bigint;
-    evidence: Array<string>;
-    timeline: Array<DisputeEvent>;
-}
-export interface InventoryItem {
-    id: bigint;
-    threshold: bigint;
-    listingId: bigint;
-    forecastDays: bigint;
-    currentStock: bigint;
-}
-export interface AuditEvent {
-    action: string;
-    performedBy: string;
-    timestamp: bigint;
-}
-export interface Lesson {
-    id: bigint;
-    title: string;
-    content: string;
-    order: bigint;
-    durationMinutes: bigint;
-    videoUrl: string;
-    courseId: bigint;
-}
-export interface KycRecord {
-    id: bigint;
-    status: KycVerificationStatus;
-    selfieVerified: boolean;
-    idVerified: boolean;
-    auditEvents: Array<AuditEvent>;
-    userId: bigint;
-}
-export interface CreateSellerListingInput {
-    farmerId: bigint;
-    name: string;
-    contractType: ContractType;
-    description: string;
-    imageUrl: string;
-    bulkUploadBatch: string;
-    payoutSchedule: PayoutSchedule;
-    category: ProduceCategory;
-    certifications: Array<string>;
-    price: number;
-    escrowEnabled: boolean;
-    verificationStatus: VerificationStatus;
-}
-export interface MarketPriceTick {
-    id: bigint;
-    date: bigint;
-    cropName: string;
-    price: number;
-    changePercent: number;
-}
-export interface SalesAnalytics {
-    id: bigint;
-    period: SalesPeriod;
-    cropName: string;
-    totalRevenue: number;
-    unitsSold: bigint;
-}
-export interface SellerListing {
-    id: bigint;
-    farmerId: bigint;
-    name: string;
-    createdAt: bigint;
-    contractType: ContractType;
-    description: string;
-    imageUrl: string;
-    bulkUploadBatch: string;
-    payoutSchedule: PayoutSchedule;
-    category: ProduceCategory;
-    rating: number;
-    certifications: Array<string>;
-    price: number;
-    escrowEnabled: boolean;
-    verificationStatus: VerificationStatus;
-}
-export interface ForumPost {
-    id: bigint;
-    upvotes: bigint;
-    title: string;
+export interface TicketInput {
+    subject: string;
     body: string;
-    author: string;
-    replies: Array<ForumReply>;
+    category: TicketCategory;
 }
-export interface Farmer {
-    id: bigint;
-    bio: string;
-    numListings: bigint;
-    name: string;
-    kycStatus: KycStatus;
-    avatarUrl: string;
-    rating: number;
-    location: string;
+export type Result_2 = {
+    __kind__: "ok";
+    ok: OrderView;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface ReportRange {
+    toNs: Timestamp;
+    fromNs: Timestamp;
 }
-export interface LogisticsListing {
+export interface Payout {
     id: bigint;
-    serviceArea: string;
-    ratePerKm: number;
-    imageUrl: string;
-    providerName: string;
+    status: PayoutStatus;
+    bankAccountId: bigint;
+    userId: bigint;
+    createdAt: Timestamp;
+    orderId?: bigint;
+    scheduledFor: Timestamp;
+    amountInr: bigint;
+    paidAt?: Timestamp;
+}
+export interface BankAccountInput {
+    ifsc: string;
+    accountHolderName: string;
+    accountNumber: string;
+    confirmAccountNumber: string;
+}
+export interface AppConfig {
+    sessionTtlHours: bigint;
+    kycAutoApproveThreshold: number;
+    kycPriorityHighBelow: number;
+    commissionBps: bigint;
+    kycAttemptWindowHours: bigint;
+    otpRateLimitWindowSecs: bigint;
+    kycMaxAttempts: bigint;
+    kycCheckoutThresholdInr: bigint;
+    otpExpirySecs: bigint;
+    environment: Environment;
+    kycPriorityMediumBelow: number;
+    payoutHoldHours: bigint;
+    otpRateLimitMax: bigint;
+}
+export interface SendOtpResult {
+    requestId: string;
+    expiresInSecs: bigint;
+}
+export type Result_5 = {
+    __kind__: "ok";
+    ok: null;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_4 = {
+    __kind__: "ok";
+    ok: SendOtpResult;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_7 = {
+    __kind__: "ok";
+    ok: CheckoutIntent;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface AttributeField {
+    key: string;
+    fieldLabel: string;
+    unit?: string;
+    required: boolean;
+    options: Array<string>;
+    fieldType: AttributeFieldType;
+}
+export type OnboardingProfile = {
+    __kind__: "Buyer";
+    Buyer: {
+        name: string;
+        deliveryLocation: string;
+    };
+} | {
+    __kind__: "Seller";
+    Seller: {
+        name: string;
+        businessType: BusinessType;
+        primaryCategoryId: bigint;
+    };
+};
+export interface ConfirmCheckoutResult {
+    order?: OrderView;
+    payment: Payment;
+}
+export type Result_6 = {
+    __kind__: "ok";
+    ok: {
+        branch: string;
+        bankName: string;
+    };
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type KycReviewDecision = {
+    __kind__: "Approve";
+    Approve: null;
+} | {
+    __kind__: "Reject";
+    Reject: KycRejectionReason;
+};
+export type Result_12 = {
+    __kind__: "ok";
+    ok: Array<Listing>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_9 = {
+    __kind__: "ok";
+    ok: Array<SupportTicket>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface Payment {
+    status: PaymentStatus;
+    method: PaymentMethod;
+    idempotencyKey: string;
+    provider: string;
+    listingId: bigint;
+    createdAt: Timestamp;
+    providerPaymentId: string;
+    orderId?: bigint;
+    updatedAt: Timestamp;
+    buyerId: bigint;
+    quantity: bigint;
+    amountInr: bigint;
 }
 export interface Order {
     id: bigint;
     status: OrderStatus;
-    total: number;
+    paymentStatus: PaymentStatus;
     listingId: bigint;
-    createdAt: bigint;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+    totalAmountInr: bigint;
     buyerId: bigint;
     quantity: bigint;
+    sellerId: bigint;
+    timeline: Array<OrderEvent>;
 }
-export interface CreateNotificationInput {
-    title: string;
-    notifType: NotifType;
-    body: string;
-    userId: bigint;
-    priority: NotifPriority;
+export interface KycQueueRow {
+    applicantName: string;
+    applicantPhone: string;
+    applicantRoles: Array<UserRole>;
+    document: KycDocument;
+    priority: Priority;
 }
-export interface SeasonalAlert {
-    id: bigint;
-    region: string;
-    alertType: SeasonalAlertType;
-    title: string;
-    description: string;
-    timestamp: bigint;
-    cropName: string;
-    severity: AlertSeverity;
-}
-export interface Certification {
-    id: bigint;
-    title: string;
-    badgeUrl: string;
-    userId: bigint;
-    issuedAt: bigint;
-    courseId: bigint;
-}
-export interface MarketPrice {
-    id: bigint;
-    region: string;
-    crop: string;
-    date: bigint;
-    bidPrice: number;
-    askPrice: number;
-}
+export type ModerationAction = {
+    __kind__: "Approve";
+    Approve: null;
+} | {
+    __kind__: "Reject";
+    Reject: string;
+} | {
+    __kind__: "RequestChanges";
+    RequestChanges: string;
+};
+export type Result = {
+    __kind__: "ok";
+    ok: VerifyOtpResult;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_10 = {
+    __kind__: "ok";
+    ok: Array<Payout>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
 export interface Notification {
     id: bigint;
     title: string;
-    notifType: NotifType;
     body: string;
     userId: bigint;
-    createdAt: bigint;
-    isRead: boolean;
-    priority: NotifPriority;
+    notificationType: NotificationType;
+    createdAt: Timestamp;
+    read: boolean;
+    payload: NotificationPayload;
 }
-export interface Conversation {
+export type Result_8 = {
+    __kind__: "ok";
+    ok: Array<OrderView>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type ApiError = {
+    __kind__: "InvalidInput";
+    InvalidInput: string;
+} | {
+    __kind__: "ProviderUnavailable";
+    ProviderUnavailable: string;
+} | {
+    __kind__: "KycInProgress";
+    KycInProgress: KycGateInfo;
+} | {
+    __kind__: "InvalidTransition";
+    InvalidTransition: {
+        toStatus: string;
+        fromStatus: string;
+        message: string;
+    };
+} | {
+    __kind__: "NotFound";
+    NotFound: string;
+} | {
+    __kind__: "Unauthorized";
+    Unauthorized: string;
+} | {
+    __kind__: "RateLimited";
+    RateLimited: {
+        message: string;
+        retryAfterSecs: bigint;
+    };
+} | {
+    __kind__: "KycRequired";
+    KycRequired: KycGateInfo;
+} | {
+    __kind__: "Forbidden";
+    Forbidden: string;
+} | {
+    __kind__: "Conflict";
+    Conflict: string;
+};
+export interface AdminLoginResult {
+    token: string;
+    name: string;
+    email: string;
+    adminId: bigint;
+}
+export interface KycSubmission {
+    selfieUrl?: string;
+    docType: KycDocType;
+    fileUrl: string;
+}
+export interface OrderView {
+    order: Order;
+    listingUnit: string;
+    sellerName: string;
+    listingImageUrl?: string;
+    listingTitle: string;
+    buyerName: string;
+}
+export interface MeView {
+    hasVerifiedBankAccount: boolean;
+    unreadNotifications: bigint;
+    user: User;
+}
+export type Timestamp = bigint;
+export type Result_17 = {
+    __kind__: "ok";
+    ok: ConfirmCheckoutResult;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_13 = {
+    __kind__: "ok";
+    ok: Array<BankAccount>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_25 = {
+    __kind__: "ok";
+    ok: BankAccount;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface VerifyOtpResult {
+    isNewUser: boolean;
+    user: User;
+    sessionToken: string;
+}
+export interface KycDocument {
     id: bigint;
-    lastMessageAt: bigint;
-    lastMessage: string;
-    unreadCount: bigint;
-    participantIds: Array<bigint>;
-}
-export interface PlantingEntry {
-    id: bigint;
-    plantDate: bigint;
-    notes: string;
-    cropName: string;
-    harvestDate: bigint;
-}
-export interface LiveStream {
-    id: bigint;
-    status: StreamStatus;
-    title: string;
-    startedAt?: bigint;
-    thumbnailUrl: string;
-    endedAt?: bigint;
-    description: string;
-    hostId: bigint;
-    viewerCount: bigint;
-    scheduledAt: bigint;
-}
-export interface Reel {
-    id: bigint;
-    title: string;
-    thumbnailUrl: string;
-    farmerId: bigint;
-    viewCount: bigint;
-    linkedListingId?: bigint;
-}
-export interface MaintenanceEntry {
-    technician: string;
-    date: bigint;
-    description: string;
-}
-export interface Enrollment {
-    id: bigint;
-    completedAt?: bigint;
+    status: KycDocStatus;
     userId: bigint;
-    progress: number;
-    enrolledAt: bigint;
-    courseId: bigint;
+    rejectionReason?: KycRejectionReason;
+    submittedAt: Timestamp;
+    selfieUrl?: string;
+    reviewedAt?: Timestamp;
+    reviewedBy?: bigint;
+    confidenceScore?: number;
+    isLatest: boolean;
+    docType: KycDocType;
+    fileUrl: string;
+    attemptNumber: bigint;
 }
-export interface Group {
-    id: bigint;
-    name: string;
-    memberCount: bigint;
-    description: string;
-    iconUrl: string;
+export interface KycState {
+    status: KycStatus;
+    documents: Array<KycDocument>;
+    attemptsUsedInWindow: bigint;
+    rejectionReason?: KycRejectionReason;
+    canResubmit: boolean;
+    maxAttempts: bigint;
 }
-export interface EquipmentGuide {
-    id: bigint;
-    compatibility: Array<string>;
-    equipmentName: string;
-    maintenanceLog: Array<MaintenanceEntry>;
+export type Result_16 = {
+    __kind__: "ok";
+    ok: SupportTicket;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_1 = {
+    __kind__: "ok";
+    ok: Listing;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface ModerationRow {
+    listing: Listing;
+    categoryName: string;
+    sellerName: string;
+    sellerKycStatus: KycStatus;
 }
-export interface CreateReelInput {
+export type Result_22 = {
+    __kind__: "ok";
+    ok: Reports;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_11 = {
+    __kind__: "ok";
+    ok: Array<Notification>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface ListingInput {
+    categoryId: bigint;
     title: string;
-    thumbnailUrl: string;
-    farmerId: bigint;
-    linkedListingId?: bigint;
-}
-export interface Course {
-    id: bigint;
-    title: string;
-    thumbnailUrl: string;
-    createdAt: bigint;
-    educatorId: bigint;
+    unit: string;
     description: string;
-    level: string;
-    durationMinutes: bigint;
-    isCertified: boolean;
-    category: string;
-    rating: number;
-    price: number;
-    enrollmentCount: bigint;
-}
-export interface Educator {
-    id: bigint;
-    bio: string;
-    courseCount: bigint;
-    name: string;
-    specialty: string;
-    kycStatus: KycStatus;
-    avatarUrl: string;
-    rating: number;
-    studentCount: bigint;
-}
-export interface CreateQuestionInput {
-    title: string;
-    authorId: bigint;
-    description: string;
-    category: string;
-}
-export interface CreateCourseInput {
-    title: string;
-    thumbnailUrl: string;
-    educatorId: bigint;
-    description: string;
-    level: string;
-    durationMinutes: bigint;
-    isCertified: boolean;
-    category: string;
-    price: number;
-}
-export interface ExpertProfile {
-    id: bigint;
-    name: string;
-    hourlyRate: number;
-    available: boolean;
-    specialty: string;
-    imageUrl: string;
-}
-export interface Alert {
-    id: bigint;
-    alertType: AlertType;
-    title: string;
-    description: string;
-    timestamp: bigint;
-    severity: AlertSeverity;
+    attributes: Array<[string, string]>;
+    quantity: bigint;
+    priceInr: bigint;
     location: string;
+    images: Array<ListingImage>;
 }
-export interface DirectMessage {
+export interface OrderEvent {
+    at: Timestamp;
+    status: OrderStatus;
+    note: string;
+}
+export type Result_19 = {
+    __kind__: "ok";
+    ok: AppConfig;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface ListingImage {
+    url: string;
+    qualityFlag?: ImageQualityFlag;
+    order: bigint;
+}
+export type Result_24 = {
+    __kind__: "ok";
+    ok: Array<KycQueueRow>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_14 = {
+    __kind__: "ok";
+    ok: MeView;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface PublicListing {
     id: bigint;
-    content: string;
-    isRead: boolean;
-    isVoiceMessage: boolean;
-    receiverId: bigint;
-    timestamp: bigint;
-    senderId: bigint;
+    categoryId: bigint;
+    status: ListingStatus;
+    title: string;
+    categoryName: string;
+    createdAt: Timestamp;
+    unit: string;
+    sellerKycVerified: boolean;
+    description: string;
+    sellerName: string;
+    attributes: Array<[string, string]>;
+    quantity: bigint;
+    sellerId: bigint;
+    priceInr: bigint;
+    location: string;
+    images: Array<ListingImage>;
+}
+export interface PublicConfig {
+    commissionBps: bigint;
+    kycAttemptWindowHours: bigint;
+    otpRateLimitWindowSecs: bigint;
+    kycMaxAttempts: bigint;
+    kycCheckoutThresholdInr: bigint;
+    otpExpirySecs: bigint;
+    environment: Environment;
+    payoutHoldHours: bigint;
+    otpRateLimitMax: bigint;
+}
+export interface Category {
+    id: bigint;
+    attributeSchema: Array<AttributeField>;
+    name: string;
+    parentId?: bigint;
+}
+export interface SupportTicket {
+    id: bigint;
+    status: TicketStatus;
+    subject: string;
+    body: string;
+    userId: bigint;
+    createdAt: Timestamp;
+    category: TicketCategory;
+    priority: Priority;
+    assignedAdminId?: bigint;
+}
+export interface BankAccount {
+    id: bigint;
+    branch: string;
+    userId: bigint;
+    ifsc: string;
+    createdAt: Timestamp;
+    accountHolderName: string;
+    bankName: string;
+    providerToken: string;
+    accountNumberLast4: string;
+    verificationStatus: BankVerificationStatus;
 }
 export interface Listing {
     id: bigint;
-    farmerId: bigint;
-    name: string;
-    createdAt: bigint;
+    categoryId: bigint;
+    status: ListingStatus;
+    title: string;
+    moderationNote?: string;
+    createdAt: Timestamp;
+    unit: string;
     description: string;
-    imageUrl: string;
-    category: ProduceCategory;
-    rating: number;
-    price: number;
-    escrowEnabled: boolean;
+    updatedAt: Timestamp;
+    attributes: Array<[string, string]>;
+    quantity: bigint;
+    sellerId: bigint;
+    priceInr: bigint;
+    location: string;
+    images: Array<ListingImage>;
 }
-export interface CreateListingInput {
-    farmerId: bigint;
-    name: string;
-    description: string;
-    imageUrl: string;
-    category: ProduceCategory;
-    price: number;
-    escrowEnabled: boolean;
-}
-export interface ForumReply {
-    body: string;
-    author: string;
-    timestamp: bigint;
-}
-export interface MachineryListing {
+export interface User {
     id: bigint;
-    dailyRate: number;
-    ownerId: bigint;
     name: string;
-    available: boolean;
-    imageUrl: string;
-    category: string;
+    createdAt: Timestamp;
+    kycRejectionReason?: KycRejectionReason;
+    businessType?: BusinessType;
+    kycStatus: KycStatus;
+    deliveryLocation?: string;
+    primaryCategoryId?: bigint;
+    phone: string;
+    roles: Array<UserRole>;
 }
-export interface SubmitOrderInput {
-    total: number;
+export type Result_21 = {
+    __kind__: "ok";
+    ok: AdminLoginResult;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface CheckoutIntent {
+    listingTitle: string;
+    payment: Payment;
+}
+export type SellerListingAction = {
+    __kind__: "Restock";
+    Restock: bigint;
+} | {
+    __kind__: "Resume";
+    Resume: null;
+} | {
+    __kind__: "Pause";
+    Pause: null;
+} | {
+    __kind__: "Archive";
+    Archive: null;
+};
+export type Result_18 = {
+    __kind__: "ok";
+    ok: User;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_3 = {
+    __kind__: "ok";
+    ok: KycState;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface KycGateInfo {
+    rejectionReason?: KycRejectionReason;
+    kycStatus: KycStatus;
+    message: string;
+    canResubmit: boolean;
+}
+export type Result_23 = {
+    __kind__: "ok";
+    ok: Array<ModerationRow>;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export type Result_15 = {
+    __kind__: "ok";
+    ok: PublicListing;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface NotificationPayload {
+    listingId?: bigint;
+    payoutId?: bigint;
+    orderId?: bigint;
+    kycDocumentId?: bigint;
+}
+export interface BrowseFilter {
+    categoryId?: bigint;
+    search?: string;
+}
+export interface CheckoutInput {
+    method: PaymentMethod;
+    idempotencyKey: string;
     listingId: bigint;
-    buyerId: bigint;
     quantity: bigint;
 }
-export interface Answer {
-    id: bigint;
-    content: string;
-    upvoteCount: bigint;
-    authorId: bigint;
-    questionId: bigint;
+export type Result_20 = {
+    __kind__: "ok";
+    ok: KycDocument;
+} | {
+    __kind__: "err";
+    err: ApiError;
+};
+export interface Reports {
+    newUserCount: bigint;
+    activeUserCount: bigint;
+    gmvInr: bigint;
+    toNs: Timestamp;
+    orderCount: bigint;
+    payoutPaidInr: bigint;
+    publishedListingCount: bigint;
+    fromNs: Timestamp;
+    totalUserCount: bigint;
+    refundedOrderCount: bigint;
+    newListingCount: bigint;
 }
-export interface TeamMember {
-    id: bigint;
-    permissions: Array<string>;
-    name: string;
-    role: string;
-    lastActive: bigint;
+export enum AttributeFieldType {
+    SELECT = "SELECT",
+    DATE = "DATE",
+    TEXT = "TEXT",
+    NUMBER = "NUMBER"
 }
-export interface Question {
-    id: bigint;
-    title: string;
-    upvoteCount: bigint;
-    authorId: bigint;
-    createdAt: bigint;
-    description: string;
-    answerCount: bigint;
-    category: string;
+export enum BankVerificationStatus {
+    VERIFIED = "VERIFIED",
+    UNVERIFIED = "UNVERIFIED",
+    PENNY_DROP_PENDING = "PENNY_DROP_PENDING",
+    FAILED = "FAILED"
 }
-export interface CreateEnrollmentInput {
-    userId: bigint;
-    courseId: bigint;
+export enum BusinessType {
+    INDIVIDUAL = "INDIVIDUAL",
+    REGISTERED = "REGISTERED"
 }
-export enum AlertType {
-    Pest = "Pest",
-    Weather = "Weather"
+export enum DisputeOutcome {
+    RefundBuyer = "RefundBuyer",
+    ReleaseToSeller = "ReleaseToSeller"
 }
-export enum ContractType {
-    None = "None",
-    Phytosanitary = "Phytosanitary",
-    Rental = "Rental"
+export enum Environment {
+    Production = "Production",
+    Development = "Development"
 }
-export enum DisputeStatus {
-    UnderReview = "UnderReview",
-    Open = "Open",
-    Escalated = "Escalated",
-    Resolved = "Resolved"
+export enum ImageQualityFlag {
+    BLURRY = "BLURRY",
+    LOW_RESOLUTION = "LOW_RESOLUTION"
+}
+export enum KycDocStatus {
+    REJECTED = "REJECTED",
+    VERIFIED = "VERIFIED",
+    PENDING = "PENDING",
+    IN_REVIEW = "IN_REVIEW"
+}
+export enum KycDocType {
+    GST = "GST",
+    PAN = "PAN",
+    AADHAAR = "AADHAAR"
+}
+export enum KycRejectionReason {
+    SELFIE_MISMATCH = "SELFIE_MISMATCH",
+    NAME_MISMATCH = "NAME_MISMATCH",
+    EXPIRED_DOCUMENT = "EXPIRED_DOCUMENT",
+    BLURRY_DOCUMENT = "BLURRY_DOCUMENT",
+    FRAUD_SUSPECTED = "FRAUD_SUSPECTED"
 }
 export enum KycStatus {
-    Unverified = "Unverified",
-    Verified = "Verified",
-    Pending = "Pending"
+    REJECTED = "REJECTED",
+    NONE = "NONE",
+    VERIFIED = "VERIFIED",
+    PENDING = "PENDING",
+    IN_REVIEW = "IN_REVIEW"
 }
-export enum KycVerificationStatus {
-    Rejected = "Rejected",
-    Verified = "Verified",
-    Pending = "Pending"
+export enum ListingStatus {
+    REJECTED = "REJECTED",
+    PENDING_REVIEW = "PENDING_REVIEW",
+    SOLD_OUT = "SOLD_OUT",
+    PUBLISHED = "PUBLISHED",
+    ARCHIVED = "ARCHIVED",
+    DRAFT = "DRAFT",
+    PAUSED = "PAUSED"
 }
-export enum NotifPriority {
-    Low = "Low",
-    High = "High",
-    Medium = "Medium",
-    Critical = "Critical"
-}
-export enum NotifType {
-    SystemAlert = "SystemAlert",
-    Transaction = "Transaction",
-    MarketIntelligence = "MarketIntelligence",
-    Educational = "Educational",
-    Emergency = "Emergency"
+export enum NotificationType {
+    PAYOUT_UPDATE = "PAYOUT_UPDATE",
+    KYC_UPDATE = "KYC_UPDATE",
+    ORDER_UPDATE = "ORDER_UPDATE",
+    SYSTEM = "SYSTEM",
+    LISTING_UPDATE = "LISTING_UPDATE"
 }
 export enum OrderStatus {
-    Disputed = "Disputed",
-    Delivered = "Delivered",
-    Confirmed = "Confirmed",
-    Shipped = "Shipped",
-    Pending = "Pending"
+    CANCELLED = "CANCELLED",
+    COMPLETED = "COMPLETED",
+    RESOLVED = "RESOLVED",
+    IN_PROGRESS = "IN_PROGRESS",
+    DISPUTED = "DISPUTED",
+    CONFIRMED = "CONFIRMED",
+    PLACED = "PLACED"
 }
-export enum PayoutSchedule {
-    Net30 = "Net30",
-    Weekly = "Weekly",
-    Daily = "Daily"
+export enum PaymentMethod {
+    UPI = "UPI",
+    NETBANKING = "NETBANKING",
+    CARD = "CARD"
 }
-export enum ProduceCategory {
-    Eggs = "Eggs",
-    Grains = "Grains",
-    Dairy = "Dairy",
-    Vegetables = "Vegetables",
-    Other = "Other",
-    Fruits = "Fruits"
+export enum PaymentStatus {
+    PAID = "PAID",
+    FAILED = "FAILED",
+    REFUNDED = "REFUNDED",
+    PENDING = "PENDING"
 }
-export enum SalesPeriod {
-    Weekly = "Weekly",
-    Daily = "Daily",
-    Monthly = "Monthly",
-    Yearly = "Yearly"
+export enum PayoutStatus {
+    SCHEDULED = "SCHEDULED",
+    PAID = "PAID",
+    FAILED = "FAILED",
+    PROCESSING = "PROCESSING"
 }
-export enum SeasonalAlertType {
-    Pest = "Pest",
-    Price = "Price",
-    Weather = "Weather"
+export enum Priority {
+    LOW = "LOW",
+    HIGH = "HIGH",
+    MEDIUM = "MEDIUM"
 }
-export enum StreamStatus {
-    Ended = "Ended",
-    Live = "Live",
-    Scheduled = "Scheduled"
+export enum TicketCategory {
+    KYC = "KYC",
+    ACCOUNT = "ACCOUNT",
+    TECHNICAL = "TECHNICAL",
+    PAYMENTS = "PAYMENTS",
+    ORDER_DISPUTE = "ORDER_DISPUTE"
 }
-export enum VerificationStatus {
-    Approved = "Approved",
-    Expired = "Expired",
-    Pending = "Pending"
+export enum TicketStatus {
+    OPEN = "OPEN",
+    RESOLVED = "RESOLVED",
+    IN_PROGRESS = "IN_PROGRESS",
+    CLOSED = "CLOSED"
+}
+export enum UserRole {
+    SELLER = "SELLER",
+    BUYER = "BUYER"
 }
 export interface backendInterface {
-    addGroupMessage(input: AddGroupMessageInput): Promise<GroupMessage>;
-    add_dispute_case(orderId: bigint, evidence: Array<string>): Promise<DisputeCase>;
-    add_forum_post(author: string, title: string, body: string): Promise<ForumPost>;
-    add_kyc_record(userId: bigint): Promise<KycRecord>;
-    add_seller_listing(input: CreateSellerListingInput): Promise<SellerListing>;
-    createCourse(input: CreateCourseInput): Promise<Course>;
-    createListing(input: CreateListingInput): Promise<Listing>;
-    createLiveStream(input: CreateLiveStreamInput): Promise<LiveStream>;
-    createNotification(input: CreateNotificationInput): Promise<Notification>;
-    createQuestion(input: CreateQuestionInput): Promise<Question>;
-    createReel(input: CreateReelInput): Promise<Reel>;
-    enrollInCourse(input: CreateEnrollmentInput): Promise<Enrollment>;
-    getAlerts(): Promise<Array<Alert>>;
-    getAnswers(questionId: bigint): Promise<Array<Answer>>;
-    getCertificationsByUser(userId: bigint): Promise<Array<Certification>>;
-    getConversations(userId: bigint): Promise<Array<Conversation>>;
-    getCourseById(id: bigint): Promise<Course | null>;
-    getCourses(): Promise<Array<Course>>;
-    getDirectMessages(conversationId: bigint): Promise<Array<DirectMessage>>;
-    getEducatorById(id: bigint): Promise<Educator | null>;
-    getEducators(): Promise<Array<Educator>>;
-    getEnrollmentsByUser(userId: bigint): Promise<Array<Enrollment>>;
-    getFarmers(): Promise<Array<Farmer>>;
-    getGroupMessages(groupId: bigint): Promise<Array<GroupMessage>>;
-    getGroups(): Promise<Array<Group>>;
-    getLessonsByCourse(courseId: bigint): Promise<Array<Lesson>>;
-    getListings(): Promise<Array<Listing>>;
-    getLiveStreams(): Promise<Array<LiveStream>>;
-    getNotifications(userId: bigint): Promise<Array<Notification>>;
-    getOrders(): Promise<Array<Order>>;
-    getQA(): Promise<Array<Question>>;
-    getReels(): Promise<Array<Reel>>;
-    getServices(): Promise<{
-        logistics: Array<LogisticsListing>;
-        experts: Array<ExpertProfile>;
-        machinery: Array<MachineryListing>;
-    }>;
-    get_dispute_cases(): Promise<Array<DisputeCase>>;
-    get_equipment_guides(): Promise<Array<EquipmentGuide>>;
-    get_forum_posts(): Promise<Array<ForumPost>>;
-    get_inventory_items(): Promise<Array<InventoryItem>>;
-    get_kyc_records(): Promise<Array<KycRecord>>;
-    get_market_price_ticks(): Promise<Array<MarketPriceTick>>;
-    get_market_prices(): Promise<Array<MarketPrice>>;
-    get_planting_entries(): Promise<Array<PlantingEntry>>;
-    get_sales_analytics(): Promise<Array<SalesAnalytics>>;
-    get_seasonal_alerts(): Promise<Array<SeasonalAlert>>;
-    get_seller_listing(id: bigint): Promise<SellerListing | null>;
-    get_seller_listings(): Promise<Array<SellerListing>>;
-    get_team_members(): Promise<Array<TeamMember>>;
-    markNotificationRead(notifId: bigint): Promise<boolean>;
-    sendDirectMessage(input: CreateDirectMessageInput): Promise<DirectMessage>;
-    submitOrder(input: SubmitOrderInput): Promise<Order>;
-    update_kyc_status(id: bigint, status: KycVerificationStatus): Promise<boolean>;
+    addBankAccount(token: string, input: BankAccountInput): Promise<Result_25>;
+    adminGetConfig(token: string): Promise<Result_19>;
+    adminGetDisputedOrders(token: string): Promise<Result_8>;
+    adminGetKycQueue(token: string): Promise<Result_24>;
+    adminGetListingQueue(token: string): Promise<Result_23>;
+    adminGetReports(token: string, range: ReportRange): Promise<Result_22>;
+    adminLogin(email: string, password: string): Promise<Result_21>;
+    adminModerateListing(token: string, listingId: bigint, action: ModerationAction): Promise<Result_1>;
+    adminResolveDispute(token: string, orderId: bigint, outcome: DisputeOutcome, note: string): Promise<Result_2>;
+    adminReviewKyc(token: string, documentId: bigint, decision: KycReviewDecision): Promise<Result_20>;
+    adminRunPayoutCycle(token: string): Promise<Result_5>;
+    adminStartKycReview(token: string, documentId: bigint): Promise<Result_20>;
+    adminUpdateConfig(token: string, newConfig: AppConfig): Promise<Result_19>;
+    browseListings(filter: BrowseFilter): Promise<Array<PublicListing>>;
+    completeOnboarding(token: string, profile: OnboardingProfile): Promise<Result_18>;
+    confirmCheckout(token: string, idempotencyKey: string, succeed: boolean): Promise<Result_17>;
+    createListing(token: string, input: ListingInput): Promise<Result_1>;
+    createSupportTicket(token: string, input: TicketInput): Promise<Result_16>;
+    getCategories(): Promise<Array<Category>>;
+    getKycState(token: string): Promise<Result_3>;
+    getListingDetail(listingId: bigint): Promise<Result_15>;
+    getMe(token: string): Promise<Result_14>;
+    getMyBankAccounts(token: string): Promise<Result_13>;
+    getMyListing(token: string, listingId: bigint): Promise<Result_1>;
+    getMyListings(token: string): Promise<Result_12>;
+    getMyNotifications(token: string): Promise<Result_11>;
+    getMyOrders(token: string): Promise<Result_8>;
+    getMyPayouts(token: string): Promise<Result_10>;
+    getMySupportTickets(token: string): Promise<Result_9>;
+    getOrder(token: string, orderId: bigint): Promise<Result_2>;
+    getPublicConfig(): Promise<PublicConfig>;
+    getSellerOrders(token: string): Promise<Result_8>;
+    initiateCheckout(token: string, input: CheckoutInput): Promise<Result_7>;
+    logout(token: string): Promise<void>;
+    lookupIfsc(ifscRaw: string): Promise<Result_6>;
+    manageListing(token: string, listingId: bigint, action: SellerListingAction): Promise<Result_1>;
+    markAllNotificationsRead(token: string): Promise<Result_5>;
+    markNotificationRead(token: string, notificationId: bigint): Promise<Result_5>;
+    sendOtp(phoneRaw: string): Promise<Result_4>;
+    submitKycDocument(token: string, submission: KycSubmission): Promise<Result_3>;
+    submitListingForPublish(token: string, listingId: bigint): Promise<Result_1>;
+    transitionOrderStatus(token: string, orderId: bigint, newStatus: OrderStatus): Promise<Result_2>;
+    updateListing(token: string, listingId: bigint, input: ListingInput): Promise<Result_1>;
+    verifyOtp(phoneRaw: string, otp: string, requestId: string): Promise<Result>;
 }
