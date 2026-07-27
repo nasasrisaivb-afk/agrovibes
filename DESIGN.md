@@ -34,12 +34,14 @@ Dark-only: `color-scheme: dark`, no light mode.
 | Mono | Geist Mono | Prices, counts, OTP, IFSC, confidence scores |
 
 ## Structure
-- **Consumer app**: sticky top bar (brand, notifications, profile) + fixed
-  bottom tab bar on mobile (Home, Orders, Sell, Alerts, Profile — 44px+
-  targets); the same items move into the top bar on md+. Content max-width
-  5xl, single column on mobile, 2–4 col listing grid scaling up.
-- **Admin console** (`/admin`): separate shell with employee login, tab nav
-  (KYC review, Listing moderation, Reports), denser desktop-friendly rows.
+- **Consumer app**:
+  - **Mobile (0–767px)**: sticky top bar + fixed bottom tab bar (Home, Orders,
+    Sell, Alerts, Profile — 44px+ targets).
+  - **Tablet (768–1023px)**: top bar with inline nav; bottom tabs hidden.
+  - **Desktop (1024px+)**: collapsible sidebar (expanded or icon rail) + main
+    content; denser seller table and analytics. Content max-width 5xl.
+- **Admin console** (`/admin`): separate shell with employee login; desktop
+  sidebar (KYC, Listings, Reports); mobile tab strip.
 
 ## Signature details
 - `gold-gradient-text` brand treatment; `card-hover` lift with gold border.

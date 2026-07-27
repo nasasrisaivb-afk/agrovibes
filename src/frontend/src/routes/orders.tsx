@@ -86,15 +86,15 @@ function OrdersScreen() {
   const active = tab === "purchases" ? myOrders : sellerOrders;
 
   return (
-    <div className="space-y-4">
-      <h1 className="font-display text-xl font-bold">Orders</h1>
+    <div className="animate-fade-in space-y-4">
+      <h1 className="font-display text-xl font-bold md:text-2xl">Orders</h1>
 
       {isSeller && (
         <Tabs
           value={tab}
           onValueChange={(v) => setTab(v as "purchases" | "sales")}
         >
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-2 md:max-w-sm">
             <TabsTrigger value="purchases">My purchases</TabsTrigger>
             <TabsTrigger value="sales">My sales</TabsTrigger>
           </TabsList>
@@ -124,7 +124,7 @@ function OrdersScreen() {
           />
         )
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {(active.data ?? []).map((view) => (
             <OrderCard
               key={view.order.id.toString()}
