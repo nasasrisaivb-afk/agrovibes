@@ -86,6 +86,16 @@ export default {
         elevated: "0 4px 12px 0 rgba(0,0,0,0.08)",
         "trust-badge": "0 2px 8px 0 rgba(0,0,0,0.06)",
       },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "hero-zoom": "hero-zoom 18s ease-out forwards",
+        "hero-rise": "hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "hero-rise-delay": "hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both",
+        "hero-rise-delay-2": "hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both",
+        "hero-rise-delay-3": "hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.34s both",
+        "fade-in": "fade-in 0.35s ease-out both",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -95,40 +105,18 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "voice-wave": {
-          "0%, 100%": { opacity: "0.4", transform: "scaleY(0.8)" },
-          "50%": { opacity: "1", transform: "scaleY(1.2)" },
+        "hero-zoom": {
+          from: { transform: "scale(1.08)" },
+          to: { transform: "scale(1)" },
         },
-        "live-pulse": {
-          "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.6" },
+        "hero-rise": {
+          from: { opacity: "0", transform: "translateY(18px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
         },
-        "reel-fade-in": {
+        "fade-in": {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
-        "reel-progress": {
-          from: { width: "0%" },
-          to: { width: "100%" },
-        },
-        pricePulse: { '0%, 100%': { opacity: '1', transform: 'scale(1)' }, '50%': { opacity: '0.8', transform: 'scale(1.05)' } },
-        sidebarCollapse: { from: { width: 'var(--sidebar-width, 250px)' }, to: { width: '60px' } },
-        slideInBottom: { from: { transform: 'translateY(100%)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } },
-        swipeUp: { from: { transform: 'translateY(100%)', opacity: '0' }, to: { transform: 'translateY(0)', opacity: '1' } },
-        voicePulse: { '0%, 100%': { opacity: '0.4', transform: 'scaleY(0.8)' }, '50%': { opacity: '1', transform: 'scaleY(1.2)' } },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "voice-wave": "voice-wave 0.6s ease-in-out infinite",
-        "live-pulse": "live-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "reel-fade-in": "reel-fade-in 0.4s ease-out",
-        "reel-progress": "reel-progress linear",
-        "swipe-up": "swipeUp 0.4s ease-out",
-        "slide-in-bottom": "slideInBottom 0.3s cubic-bezier(0.32, 0.72, 0, 1)",
-        "sidebar-collapse": "sidebarCollapse 0.3s ease-in-out",
-        "price-pulse": "pricePulse 2s ease-in-out infinite",
-        "voice-pulse": "voicePulse 0.6s ease-in-out infinite",
       },
     },
   },
