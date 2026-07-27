@@ -56,12 +56,14 @@ pnpm build
 
 ## Mobile app + web app
 
-One responsive codebase serves both:
+One responsive codebase serves both (BRD Ch. 12):
 
-- **Web** — desktop layouts via `md:` breakpoints, top navigation.
-- **Mobile** — bottom tab bar, 44px touch targets, installable **PWA**
+- **Mobile (0–767px)** — bottom tab bar, 44px touch targets, installable **PWA**
   (`manifest.webmanifest` + service worker). On Android Chrome use the install
   prompt; on iOS Safari use Share → Add to Home Screen for a full-screen app.
+- **Tablet (768–1023px)** — top navigation rail; denser listing grids.
+- **Desktop (1024px+)** — collapsible sidebar, seller analytics table, two-column
+  listing detail, admin sidebar console.
 
 ## Local development guide
 

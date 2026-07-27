@@ -11,7 +11,7 @@ export function LandingHero() {
   return (
     <section
       aria-label="CropVibe"
-      className="relative -mx-4 -mt-4 flex min-h-[calc(100dvh-3.5rem)] flex-col justify-end overflow-hidden md:min-h-[calc(100dvh-3.5rem)]"
+      className="relative flex min-h-[calc(100dvh-3.5rem)] flex-col justify-end overflow-hidden"
     >
       {/* Full-bleed visual plane */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -24,15 +24,15 @@ export function LandingHero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_oklch(0.8_0.14_85_/_0.18),_transparent_55%)]" />
       </div>
 
-      <div className="relative z-10 flex flex-col gap-5 px-5 pb-10 pt-24 sm:px-8 md:max-w-xl md:pb-16">
+      <div className="relative z-10 flex flex-col gap-5 px-5 pb-10 pt-24 sm:px-8 md:mx-auto md:max-w-5xl md:w-full md:pb-16">
         <div className="animate-hero-rise flex items-center gap-2.5">
           <Sprout className="h-8 w-8 text-primary" aria-hidden="true" />
-          <span className="gold-gradient-text font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          <span className="gold-gradient-text font-display text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
             CropVibe
           </span>
         </div>
 
-        <h1 className="animate-hero-rise-delay font-display text-2xl font-bold leading-tight text-foreground sm:text-3xl">
+        <h1 className="animate-hero-rise-delay font-display text-2xl font-bold leading-tight text-foreground sm:text-3xl md:max-w-xl md:text-4xl">
           Farm-fresh produce, direct from verified sellers
         </h1>
 

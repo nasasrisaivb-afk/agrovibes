@@ -173,7 +173,8 @@ function AuthScreen() {
   };
 
   return (
-    <div className="mx-auto max-w-md space-y-6 py-4">
+    <div className="relative mx-auto max-w-md space-y-6 py-6 md:py-10">
+      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 bg-[radial-gradient(ellipse_at_top,_oklch(0.8_0.14_85_/_0.08),_transparent_70%)]" />
       {step !== "phone" && step !== "role" && (
         <button
           type="button"
